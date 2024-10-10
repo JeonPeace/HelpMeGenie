@@ -6,7 +6,7 @@
         
         <section layout:fragment="contents" class="contents d-flex justify-content-center my-5">
             <div>
-                <div class="login-box d-flex justify-content-center align-items-start bg-white">
+                <div class="join-box d-flex justify-content-center align-items-start bg-white">
                     <div class="w-100 p-4"> 
                     	<form id="joinForm">
 	                        이름
@@ -143,7 +143,7 @@
 		                , data:{"loginId":id, "password":password, "name":name, "email":email}
 		                , success:function(data) {
 		                    if(data.result == "success") {
-		                        alert("회원가입 성공!");
+		                    	location.href = "/user/login-view";
 		                    } else {
 		                        alert("회원가입 실패!");
 		                    }
