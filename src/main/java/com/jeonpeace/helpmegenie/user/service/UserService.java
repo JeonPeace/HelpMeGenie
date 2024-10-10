@@ -34,5 +34,19 @@ public class UserService {
 		return result;	
 	}
 	
+	public boolean isDuplicateId(String loginId) {
+		
+		boolean isDuplicate = false;
+		
+		User user = userRepository.findByLoginId(loginId);
+		
+		if(user != null) {
+			isDuplicate = true;
+		}else {
+			isDuplicate = false;
+		}
+		
+		return isDuplicate;
+	}
 	
 }
