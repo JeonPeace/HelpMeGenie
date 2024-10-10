@@ -49,13 +49,4 @@ public class UserService {
 		return isDuplicate;
 	}
 	
-	public User getUser(String loginId, String password) {
-		
-		String encryptPassword = encoder.encode(password);
-		
-		User user = userRepository.findByLoginIdAndPassword(loginId, encryptPassword);
-		
-		return user;
-	}
-	
 }

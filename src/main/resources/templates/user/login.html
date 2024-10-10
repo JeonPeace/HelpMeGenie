@@ -6,20 +6,17 @@
         
     <section layout:fragment="contents" class="contents d-flex justify-content-center my-5">
         <div>
-            <div class="login-box d-flex justify-content-center align-items-start bg-white">        
+            <div class="login-box d-flex justify-content-center align-items-start bg-white  border rounded">        
                 <div class="w-100 p-5">
                     <form id="loginForm">
-                    	아이디
-                        <input type="text" class="form-control mt-3 mb-3" id="loginIdInput">
-                        비밀번호
-                        <input type="password" class="form-control mt-3 mb-3" id="passwordInput">
-                        <div class="d-flex justify-content-center">
-                        	<button type="submit" class="btn w-50 btn-dark btn-block mt-3" id="loginBtn">로그인</button>
-                        </div>                      
+                        <input type="text" class="form-control mt-3" placeholder="아이디" id="loginIdInput">
+                        <input type="password" class="form-control mt-3" placeholder="패스워드" id="passwordInput">
+                        <button type="submit" class="btn btn-dark btn-block mt-3" id="loginBtn">로그인</button>
                     </form> 
+                    <hr/>
                 </div>
             </div>
-            <div class="mt-4 p-3 d-flex justify-content-center align-items-start">
+            <div class="mt-4 p-3 d-flex justify-content-center align-items-start bg-white  border rounded">
                 계정이 없으신가요? <a href="/user/join-view">가입하기</a>
             </div>
         </div>
@@ -29,6 +26,7 @@
         $(document).ready(function() {
             $("#loginForm").on("submit", function(e) {
                 
+                // 이벤트가 가진 기본 기능을 취소 시키기
                 e.preventDefault();
                 
                 let id = $("#loginIdInput").val();
@@ -51,7 +49,7 @@
                     , success:function(data) {
                         
                         if(data.result == "success") {
-                            alert("로그인 성공!!");
+                            location.href = "/post/timeline-view";
                         } else {
                             alert("아이디와 비밀번호를 확인해 주세요");
                         }
