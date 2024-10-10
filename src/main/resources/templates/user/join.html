@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" 
+    xmlns:th="http://www.thymeleaf.org" 
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/middleDefault}">
+        
+        <section layout:fragment="contents" class="contents d-flex justify-content-center my-5">
+            <div>
+                <div class="login-box d-flex justify-content-center align-items-start bg-white">
+                    <div class="w-100 p-4"> 
+                       
+                        이름
+                        <input type="text" class="form-control mt-3 mb-4" id="nameInput">
+                        이메일
+                        <input type="text" class="form-control mt-3 mb-4" id="emailInput">                    
+                         
+                    	아이디                           
+                        <div class="d-flex mt-3 mb-4 justify-content-between">
+                            <input type="text" class="form-control col-8 mr-1 "id="idInput">
+                            <button type="button" class="btn btn-dark btn-sm col-4" id="duplicateBtn">중복확인</button>
+                        </div>
+                        <div class="small text-success d-none" id="availableText">사용 가능한 ID 입니다.</div>
+                        <div class="small text-danger d-none" id="duplicateText">중복된 ID 입니다.</div>
+                    	
+                    	비밀번호
+                        <input type="password" class="form-control mt-3 mb-4" id="passwordInput">
+                        비밀번호 확인
+                        <input type="password" class="form-control mt-3 mb-4" id="passwordConfirmInput">
+                                
+                        <div class="d-flex justify-content-center">
+                        	<button type="button" class="btn btn-dark btn-block mt-3 w-50" id="joinBtn">회원가입</button>
+                        </div>            
+                    </div>
+                    
+                </div>
+                <div class="mt-4 p-3 d-flex justify-content-center align-items-start bg-white">
+                    계정이 있으신가요? <a href="/user/login-view">로그인</a>
+                </div>
+            </div>
+        </section>
+        
+        <script layout:fragment="script">
+
+        </script>
+</html>
