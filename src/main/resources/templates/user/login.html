@@ -13,7 +13,7 @@
                         <input type="text" class="form-control mt-3 mb-2" id="loginIdInput">
                         비밀번호
                         <input type="password" class="form-control mt-3 mb-2" id="passwordInput">
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-center">	
                         	<button type="submit" class="btn btn-dark btn-block mt-3 w-50" id="loginBtn">로그인</button>
                         </div>                        
                     </form> 
@@ -51,7 +51,7 @@
                     , success:function(data) {
                         
                         if(data.result == "success") {
-                            location.href = "/post/timeline-view";
+                            alert("로그인 성공!!");
                         } else {
                             alert("아이디와 비밀번호를 확인해 주세요");
                         }
