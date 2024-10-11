@@ -1,8 +1,8 @@
 @charset "UTF-8";
 
 #wrap {
-    width: 1200px;
-    height: 900px;
+    width: 1500px;
+
     margin: 0 auto;
 }
 
@@ -19,6 +19,25 @@ header {
 	width: 600px;
 }
 
+.main-contents {
+	width: 1500px;
+	height: 800px;
+}
+
+.main-menu {
+	background-color: #F2E0F7;
+	height: 800px;
+}
+
+.search-box {
+	width: 1000px;
+	height: 340px;
+}
+
+.recommend-box {
+	width: 1000px;
+	height: 340px;
+}
 
 footer {
     height: 70px;
