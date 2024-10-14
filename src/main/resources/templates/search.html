@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Search</title>
+</head>
+<body>
+    <h1>Book Search</h1>
+    <form action="/search" method="get">
+        <label for="title">Enter Book Title:</label>
+        <input type="text" id="title" name="title" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <h1>ISBN Lookup</h1>
+    <form action="/lookup" method="get">
+        <label for="isbn">Enter ISBN:</label>
+        <input type="text" id="isbn" name="isbn" required>
+        <button type="submit">Lookup</button>
+    </form>
+
+    <h1>Recommended Books</h1>
+    <form action="/recommend" method="get">
+        <button type="submit">Get Recommendations</button>
+    </form>
+</body>
+</html>
