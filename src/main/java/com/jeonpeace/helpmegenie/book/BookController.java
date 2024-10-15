@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/book")
 public class BookController {
 
-//	@GetMapping("/search-view")
-//	public String searchView() {
-//		
-//		return "book/search";
-//	}
+	@GetMapping("/search-view")
+	public String searchView() {
+		
+		return "/book/search";
+	}
 	
 }

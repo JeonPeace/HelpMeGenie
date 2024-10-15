@@ -1,15 +1,21 @@
 package com.jeonpeace.helpmegenie.api;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jeonpeace.helpmegenie.api.service.AladinApiService;
-
-import reactor.core.publisher.Mono;
+import com.jeonpeace.helpmegenie.book.domain.BookSearchDto;
 
 @RestController
+@RequestMapping("/api")
 public class ApiRestController {
 
     private final AladinApiService aladinApiService;
@@ -19,21 +25,24 @@ public class ApiRestController {
     }
 
     // 책 제목으로 검색
-    @GetMapping("/search")
-    public Mono<String> searchBooks(@RequestParam("title") String title) {
-        return aladinApiService.searchBooksByTitle(title);
-    }
+    @PostMapping("/search")
+    public Map<String, Boolean> searchBooks(@RequestParam("searchKeyword") String searchKeyword, Model model) {
+        
+    	List<BookSearchDto> bookList = aladinApiService.searchBooksByTitle(searchKeyword);
+    	
+    	Map<String, Boolean> bookNotNull = new HashMap<>();
+    	
+    	if(bookList != null) {
+        	model.addAttribute("books", bookList);
+        	bookNotNull.put("bookNotNull", true);
+        	return bookNotNull;
+    	}else {
+    		model.addAttribute("books", bookList);
+    		bookNotNull.put("bookNotNull", false);
+    		return bookNotNull;
+    	}
 
-    // ISBN으로 책 조회
-    @GetMapping("/lookup")
-    public Mono<String> lookupBook(@RequestParam("isbn") String isbn) {
-        return aladinApiService.lookupBookByISBN(isbn);
-    }
 
-    // 추천 도서 목록
-    @GetMapping("/recommend")
-    public Mono<String> getRecommendations() {
-        return aladinApiService.getRecommendedBooks();
     }
 	
 }

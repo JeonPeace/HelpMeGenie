@@ -40,15 +40,17 @@
         			<h3 class="ml-5">알라딘 도서 검색하기</h3>
         			<div class="d-flex justify-content-center mt-3">
 	                    <div class="input-group w-75">
-	                        <input type="text" class="form-control" placeholder="책 이름을 입력하세요." aria-label="" aria-describedby="button-addon2">
+	                        <input type="text" class="form-control" placeholder="책 이름을 입력하세요." aria-label="" aria-describedby="button-addon2" id="searchKeyword">
 	                        <div class="input-group-append">
-	                          <button class="btn text-dark font-weight-bold btn-light" type="button" id="button-addon2">검색</button>
+	                          <button class="btn text-dark font-weight-bold btn-light searchBtn" type="button" id="button-addon2">검색</button>
 	                        </div>
 	                    </div>         			
         			</div>
         			<div class="d-flex justify-content-center mt-2">
-	       				<div class="search-box bg-light">
-	       					
+	       				<div class="search-box bg-light" id="searchResults">
+	       					<div th:if="${books != null}">
+								검색 결과 나열할 예정				
+	       					</div>
 	       				</div>      			
         			</div>
         			<div class="d-flex justify-content-center mt-2">
@@ -59,3 +61,40 @@
         		</div>
         	</div>
         </section>
+        
+        <script layout:fragment="script">
+        	$(document).ready(function(){
+        		
+				$(".searchBtn").on("click", function(){
+					
+					let searchKeyword = $("#searchKeyword").val();
+					
+					if(searchKeyword == ""){
+						alert("검색어를 입력하세요.");
+						return;
+					}
+					
+					$.ajax({
+						
+						type: "post"
+						, url: "/api/search"
+						, data: {"searchKeyword":searchKeyword}
+						, success:function(data){
+							if(data.bookNotNull){
+								alert("검색 완료!");
+								
+							}else{
+								alert("검색 결과가 없습니다!");
+							}
+						}
+						, error:function(){
+							alert("검색 에러!!");
+						}
+						
+					});
+					
+				});
+        		
+        	});
+        	
+        </script>
