@@ -39,62 +39,55 @@
         		<div class="w-75">
         			<h3 class="ml-5">알라딘 도서 검색하기</h3>
         			<div class="d-flex justify-content-center mt-3">
-	                    <div class="input-group w-75">
-	                        <input type="text" class="form-control" placeholder="책 이름을 입력하세요." aria-label="" aria-describedby="button-addon2" id="searchKeyword">
-	                        <div class="input-group-append">
-	                          <button class="btn text-dark font-weight-bold btn-light searchBtn" type="button" id="button-addon2">검색</button>
-	                        </div>
-	                    </div>         			
+        				<form method="get" action="/book/search-view" class="w-100 d-flex justify-content-center">
+		                    <div class="input-group w-75">
+			                    <input type="text" class="form-control" placeholder="책 이름을 입력하세요." aria-label="" aria-describedby="button-addon2" name="searchKeyword">
+			                    <div class="input-group-append">
+			                  		<button class="btn text-dark font-weight-bold btn-light searchBtn" type="submit" id="button-addon2">검색</button>
+			                    </div>         	
+		                    </div>      
+	                    </form>   			
         			</div>
         			<div class="d-flex justify-content-center mt-2">
 	       				<div class="search-box bg-light" id="searchResults">
-	       					<div th:if="${books != null}">
-								검색 결과 나열할 예정				
+	       					<div th:if="${searchBooks != null}">
+	       						<div class="d-flex justify-content-between">
+					            	<div th:each="searchBook : ${searchBooks}" class="m-3">
+					            		<div class="book-contents">
+					            			<div class="book-cover d-flex justify-content-center">
+							                	<img th:src="${searchBook.cover}" class="img-fluid" alt="Cover image">					            			
+					            			</div>
+					            			<div class="mt-2">
+								                <p class="book-title"><span th:text="${#strings.abbreviate(searchBook.title,20)}" class="font-weight-bold"></span></p>
+								                <p class="book-author"><span th:text="${#strings.abbreviate(searchBook.author, 20)}" class="font-weight-bold"></span></p>						            			
+					            			</div>			            		
+					            		</div>
+					                </div>       						
+	       						</div>
 	       					</div>
 	       				</div>      			
         			</div>
+        			<div>
+        				<h4 class="ml-5 mt-5 mb-3">알라딘 추천 도서</h4>
+        			</div>
         			<div class="d-flex justify-content-center mt-2">
 	       				<div class="recommend-box bg-light">
-	       					
+	       					<div class="d-flex justify-content-between">
+					            <div th:each="recommendBook : ${recommendBooks}" class="m-3">
+					           		<div class="book-contents">
+					           			<div class="book-cover d-flex justify-content-center">
+							               	<img th:src="${recommendBook.cover}" class="img-fluid" alt="Cover image">					            			
+					           			</div>
+					           			<div class="book-data mt-2">
+							                <p class="book-title"><span th:text="${#strings.abbreviate(recommendBook.title,20)}" class="font-weight-bold"></span></p>
+							                <p class="book-author"><span th:text="${#strings.abbreviate(recommendBook.author, 20)}" class="font-weight-bold"></span></p>						            			
+					           			</div>			            		
+					           		</div>
+					            </div>       						
+	       					</div>       					
 	       				</div>      			
         			</div>
         		</div>
         	</div>
         </section>
         
-        <script layout:fragment="script">
-        	$(document).ready(function(){
-        		
-				$(".searchBtn").on("click", function(){
-					
-					let searchKeyword = $("#searchKeyword").val();
-					
-					if(searchKeyword == ""){
-						alert("검색어를 입력하세요.");
-						return;
-					}
-					
-					$.ajax({
-						
-						type: "post"
-						, url: "/api/search"
-						, data: {"searchKeyword":searchKeyword}
-						, success:function(data){
-							if(data.bookNotNull){
-								alert("검색 완료!");
-								
-							}else{
-								alert("검색 결과가 없습니다!");
-							}
-						}
-						, error:function(){
-							alert("검색 에러!!");
-						}
-						
-					});
-					
-				});
-        		
-        	});
-        	
-        </script>

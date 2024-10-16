@@ -1,6 +1,5 @@
 package com.jeonpeace.helpmegenie.api.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -33,4 +32,14 @@ public class AladinApiService {
     	}
     }
 
+    public List<BookSearchDto> getRecommendBooks(){
+    	
+    	SearchResponseDto recommendResult = aladinApiRepository.getRecommendedBooks().block();
+    	
+    	List<BookSearchDto> bookList = recommendResult.getItem();
+    	
+    	return bookList;
+    	
+    }
+    
 }

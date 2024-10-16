@@ -22,7 +22,7 @@ public class AladinApiRepository {
     // 책 제목으로 검색 (ItemSearch)
     public Mono<SearchResponseDto> searchBooksByTitle(String query) {
         String ITEM_SEARCH_URL = "ItemSearch.aspx?ttbkey=" + TTB_KEY + "&Query=" + query 
-            + "&QueryType=Title&MaxResults=4&start=1&SearchTarget=Book&output=js&Version=20131101&Cover=big";
+            + "&QueryType=Keyword&MaxResults=4&start=1&SearchTarget=Book&output=js&Version=20131101&Cover=MidBig";
         
         return webClient.get()
                 .uri(ITEM_SEARCH_URL)
@@ -33,7 +33,7 @@ public class AladinApiRepository {
     // ISBN으로 책 정보 조회 (ItemLookUp)
     public Mono<String> lookupBookByISBN(String isbn) {
         String ITEM_LOOK_UP_URL = "ItemLookUp.aspx?ttbkey=" + TTB_KEY + "&itemIdType=ISBN&ItemId=" + isbn 
-            + "&output=js&Version=20131101&Cover=big";
+            + "&output=js&Version=20131101&Cover=MidBig";
         
         return webClient.get()
                 .uri(ITEM_LOOK_UP_URL)
@@ -42,14 +42,14 @@ public class AladinApiRepository {
     }
 
     // 추천 도서 목록 (ItemList)
-    public Mono<String> getRecommendedBooks() {
+    public Mono<SearchResponseDto> getRecommendedBooks() {
         String ITEM_RECOMMEND_URL = "ItemList.aspx?ttbkey=" + TTB_KEY 
-            + "&QueryType=ItemNewSpecial&MaxResults=4&start=1&SearchTarget=Book&output=js&Version=20131101&Cover=big";
+            + "&QueryType=Bestseller&MaxResults=4&start=1&SearchTarget=Book&output=js&Version=20131101&Cover=MidBig";
         
         return webClient.get()
                 .uri(ITEM_RECOMMEND_URL)
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(SearchResponseDto.class);
     }    
     
     

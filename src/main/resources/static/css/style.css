@@ -21,17 +21,35 @@ header {
 
 .main-contents {
 	width: 1500px;
-	height: 800px;
+	height: 900px;
 }
 
 .main-menu {
 	background-color: #F2E0F7;
-	height: 800px;
+	height: 900px;
 }
 
 .search-box {
 	width: 1000px;
 	height: 340px;
+}
+
+.book-contents {
+	width: 200px;
+	height: 330px;
+}
+
+.book-cover {
+	width: 200px;
+	height: 250px;
+}
+
+.book-title {
+	font-size: 12px;
+}
+
+.book-author {
+	font-size: 10px;
 }
 
 .recommend-box {
