@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.jeonpeace.helpmegenie.api.repository.AladinApiRepository;
+import com.jeonpeace.helpmegenie.book.domain.BookLookUpDto;
 import com.jeonpeace.helpmegenie.book.domain.BookSearchDto;
+import com.jeonpeace.helpmegenie.book.domain.LookUpResponseDto;
 import com.jeonpeace.helpmegenie.book.domain.SearchResponseDto;
 
 @Service
@@ -32,6 +34,21 @@ public class AladinApiService {
     	}
     }
 
+    public List<BookLookUpDto> getBookByIsbn(String isbn) {
+    	
+    	LookUpResponseDto lookUpResult = aladinApiRepository.getLookupBookByISBN(isbn).block();
+    	
+    	if(lookUpResult.getItem() != null) {
+    		List<BookLookUpDto> book = lookUpResult.getItem();
+    		
+    		return book;
+    	}else {
+    		List<BookLookUpDto> book = null;
+    	
+    		return book;
+    	}    	
+    }
+    
     public List<BookSearchDto> getRecommendBooks(){
     	
     	SearchResponseDto recommendResult = aladinApiRepository.getRecommendedBooks().block();

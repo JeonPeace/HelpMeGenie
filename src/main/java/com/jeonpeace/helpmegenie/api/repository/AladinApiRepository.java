@@ -3,6 +3,7 @@ package com.jeonpeace.helpmegenie.api.repository;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.jeonpeace.helpmegenie.book.domain.LookUpResponseDto;
 import com.jeonpeace.helpmegenie.book.domain.SearchResponseDto;
 
 import reactor.core.publisher.Mono;
@@ -31,14 +32,14 @@ public class AladinApiRepository {
     }    
  
     // ISBN으로 책 정보 조회 (ItemLookUp)
-    public Mono<String> lookupBookByISBN(String isbn) {
+    public Mono<LookUpResponseDto> getLookupBookByISBN(String isbn) {
         String ITEM_LOOK_UP_URL = "ItemLookUp.aspx?ttbkey=" + TTB_KEY + "&itemIdType=ISBN&ItemId=" + isbn 
             + "&output=js&Version=20131101&Cover=MidBig";
         
         return webClient.get()
                 .uri(ITEM_LOOK_UP_URL)
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(LookUpResponseDto.class);
     }
 
     // 추천 도서 목록 (ItemList)

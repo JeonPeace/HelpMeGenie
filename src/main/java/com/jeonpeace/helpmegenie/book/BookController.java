@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jeonpeace.helpmegenie.api.service.AladinApiService;
+import com.jeonpeace.helpmegenie.book.domain.BookLookUpDto;
 import com.jeonpeace.helpmegenie.book.domain.BookSearchDto;
 
 @Controller
@@ -33,6 +34,10 @@ public class BookController {
 		List<BookSearchDto> recommendBookList = aladinApiService.getRecommendBooks();
 
 		model.addAttribute("recommendBooks", recommendBookList);
+		
+		List<BookLookUpDto> lookUpBook = aladinApiService.getBookByIsbn("9788932917245");
+		
+		model.addAttribute("book", lookUpBook);
 		
 		return "/book/search";
 	}

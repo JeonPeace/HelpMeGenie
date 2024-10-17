@@ -10,8 +10,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SearchResponseDto {
-	
-    private List<BookSearchDto> item;
+public class LookUpResponseDto {
 
+	private List<BookLookUpDto> item;
+	
 }
