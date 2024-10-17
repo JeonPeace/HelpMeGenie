@@ -3,40 +3,9 @@
     xmlns:th="http://www.thymeleaf.org" 
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/leftDefault}">
+
         
-        <section layout:fragment="contents" class="contents d-flex justify-content-center my-5">
-        	<div class="main-contents d-flex w-100">
-        		<div class="w-25">
-	                <nav class="main-menu">
-	                    <ul class="nav flex-column">
-	                        <li class="nav-item">
-	                          <a class="nav-link text-dark font-weight-bold m-3" href="#">현재 진행중인 독서</a>
-	                        </li>
-	                        <li class="nav-item">
-	                          <a class="nav-link text-dark font-weight-bold m-3" href="#">새로운 독서 계획하기</a>
-	                        </li>
-	                        <li class="nav-item">
-	                          <a class="nav-link text-dark font-weight-bold m-3" href="#">독후감 작성하기</a>
-	                        </li>
-	                        <li class="nav-item">
-	                          <a class="nav-link text-dark font-weight-bold m-3" href="#">독후감 갤러리</a>
-	                        </li>
-	                        <li class="nav-item">
-	                       	  <a class="nav-link text-dark font-weight-bold m-3" href="#">알라딘 추천 도서 확인하기</a>
-	                       	</li>
-	                        <li class="nav-item">
-	                       	  <a class="nav-link text-dark font-weight-bold m-3" href="#">나만의 독후감 갤러리</a>
-	                       	</li>	                       	
-	                        <li class="nav-item">
-	                       	  <a class="nav-link text-dark font-weight-bold m-3" href="#">나의 지니</a>
-	                       	</li>
-	                        <li class="nav-item">
-	                       	  <a class="nav-link text-dark font-weight-bold m-3" href="/user/logout">로그아웃</a>
-	                       	</li>	                       	
-	                      </ul>
-	                </nav>
-        		</div>
-        		<div class="w-75">
+	<section layout:fragment="main-contents" class="w-75">
         			<h3 class="ml-5">알라딘 도서 검색하기</h3>
         			<div class="d-flex justify-content-center mt-3">
         				<form method="get" action="/book/search-view" class="w-100 d-flex justify-content-center">
@@ -87,7 +56,5 @@
 	       					</div>      						
 	       				</div>      			
         			</div>
-        		</div>
-        	</div>
-        </section>
+	</section>
         

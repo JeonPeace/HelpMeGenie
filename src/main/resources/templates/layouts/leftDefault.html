@@ -13,7 +13,39 @@
     
     <div id="wrap">
         <th:block th:replace="~{fragments/leftHeader :: header}"></th:block>
-        <th:block layout:fragment="contents"></th:block>
+        <div class="main-contents d-flex w-100 mt-3">
+        	<div class="w-25">
+	        	<nav class="main-menu">
+	            	<ul class="nav flex-column">
+	                	<li class="nav-item">
+	                    	<a class="nav-link text-dark font-weight-bold m-3" href="/plan/progress-view">현재 진행중인 독서</a>
+	                    </li>
+	                    <li class="nav-item">
+	                          <a class="nav-link text-dark font-weight-bold m-3" href="/plan/new-plan-view">새로운 독서 계획하기</a>
+	                    </li>
+	                    <li class="nav-item">
+	                      <a class="nav-link text-dark font-weight-bold m-3" href="#">독후감 작성하기</a>
+	                    </li>
+	                    <li class="nav-item">
+	                      <a class="nav-link text-dark font-weight-bold m-3" href="#">독후감 갤러리</a>
+	                    </li>
+	                    <li class="nav-item">
+	                   	  <a class="nav-link text-dark font-weight-bold m-3" href="/book/search-view">알라딘 추천 도서 확인하기</a>
+	                  	</li>
+	                    <li class="nav-item">
+	                   	  <a class="nav-link text-dark font-weight-bold m-3" href="#">나만의 독후감 갤러리</a>
+	                   	</li>	                       	
+	                    <li class="nav-item">
+	                   	  <a class="nav-link text-dark font-weight-bold m-3" href="#">나의 지니</a>
+	                   	</li>
+	                    <li class="nav-item">
+	                   	  <a class="nav-link text-dark font-weight-bold m-3" href="/user/logout">로그아웃</a>
+	                   	</li>	                       	
+	              </ul>
+	        	</nav>
+        	</div>
+        	<th:block layout:fragment="main-contents"></th:block>
+        </div>
         <th:block th:replace="~{fragments/footer :: footer}"></th:block>
     </div>
 

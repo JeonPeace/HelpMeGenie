@@ -57,6 +57,11 @@ header {
 	height: 340px;
 }
 
+#calendar {
+	width: 500px;
+	height: 500px;
+}
+
 footer {
     height: 70px;
 

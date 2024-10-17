@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" 
+    xmlns:th="http://www.thymeleaf.org" 
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/leftDefault}">
+
+        
+	<section layout:fragment="main-contents" class="w-75">
+	
+		<div>
+			
+		</div>
+	
+	    <div id='calendar'></div>
+	
+	</section>
+	
+	
+	
+	
+	
+	
+	<script layout:fragment="script">
+	
+
+	 
+    var calendar = null;
+    var initialLocaleCode = 'ko';
+    var localeSelectorEl = document.getElementById('locale-selector');
+
+        $(document).ready(function (){
+
+                var calendarEl = document.getElementById('calendar');
+                calendar = new FullCalendar.Calendar(calendarEl, {
+                    headerToolbar: {
+
+                    }
+
+                    
+                    
+                });
+                calendar.render();
+    });
+
+	</script>
