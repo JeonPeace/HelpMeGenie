@@ -23,7 +23,7 @@ public class AladinApiRepository {
     // 책 제목으로 검색 (ItemSearch)
     public Mono<SearchResponseDto> searchBooksByTitle(String query) {
         String ITEM_SEARCH_URL = "ItemSearch.aspx?ttbkey=" + TTB_KEY + "&Query=" + query 
-            + "&QueryType=Keyword&MaxResults=4&start=1&SearchTarget=Book&output=js&Version=20131101&Cover=MidBig";
+            + "&QueryType=Keyword&MaxResults=4&start=1&SearchTarget=Book&output=js&Version=20131101&Cover=Big";
         
         return webClient.get()
                 .uri(ITEM_SEARCH_URL)
@@ -45,7 +45,7 @@ public class AladinApiRepository {
     // 추천 도서 목록 (ItemList)
     public Mono<SearchResponseDto> getRecommendedBooks() {
         String ITEM_RECOMMEND_URL = "ItemList.aspx?ttbkey=" + TTB_KEY 
-            + "&QueryType=Bestseller&MaxResults=4&start=1&SearchTarget=Book&output=js&Version=20131101&Cover=MidBig";
+            + "&QueryType=Bestseller&MaxResults=4&start=1&SearchTarget=Book&output=js&Version=20131101&Cover=Big";
         
         return webClient.get()
                 .uri(ITEM_RECOMMEND_URL)

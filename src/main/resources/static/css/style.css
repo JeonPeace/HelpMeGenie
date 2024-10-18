@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 #wrap {
-    width: 1500px;
+    width: 1600px;
 
     margin: 0 auto;
 }
@@ -21,7 +21,7 @@ header {
 
 .main-contents {
 	width: 1500px;
-	height: 900px;
+	height: 1200px;
 }
 
 .main-menu {
@@ -52,13 +52,60 @@ header {
 	font-size: 10px;
 }
 
+.book-page {
+	font-size: 10px;
+}
+
+.book-description {
+	word-break: keep-all;
+}
+
 .recommend-box {
 	width: 1000px;
 	height: 340px;
 }
 
+.pull {
+	position:relative;
+	margin: 50px;
+	padding: 20px; 
+	width: 450px;
+	height: 250px; 
+	color: #FFF; 
+	border-radius: 10px; 
+}
+.pull:after {
+	content:"";
+	position: absolute;
+	top: 21px;
+	left: -30px;
+	border-right: 30px solid #f8f9fa;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+}
+
+#progress-box {
+	width: 375px;
+	height: 225px;
+}
+
+#book-selection-box {
+	width: 600px;
+	height: 360px;
+}
+
+#book-search-href {
+	width: 150px;
+	height: 200px;
+}
+
+#desciption-box {
+	width: 	400px;
+	height: 200px;
+}
+
 #calendar {
-	width: 500px;
+	width: 600px;
 	height: 500px;
 }
 

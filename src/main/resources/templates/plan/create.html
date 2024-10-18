@@ -6,13 +6,41 @@
 
         
 	<section layout:fragment="main-contents" class="w-75">
-	
-		<div>
-			
-		</div>
-	
-	    <div id='calendar'></div>
-	
+		<div class="ml-5">
+			<div class="d-flex">
+				<div id="book-selection-box" class="bg-light">
+					<div th:if="${book == null}"class="pt-5 pl-4">
+						<button type="button" id="book-search-href" onclick="location.href='/book/search-view'" class="bg-secondary d-flex justify-content-center align-items-center text-light" >
+							책 검색하기
+						</button>
+					</div>
+					<div th:if="${book != null}" class="pt-5 pl-4">
+						<div th:each="book : ${book}" class="d-flex">
+							<img th:src="${book.cover}" class="img-fluid" alt="Cover image">
+						    <div class="book-data mt-2 pl-4">							    	
+								<h4 th:text="${#strings.abbreviate(book.title,20)}" class="font-weight-bold"></h4>
+								<p ><span th:text="${#strings.abbreviate(book.author, 20)}" class="font-weight-bold"></span></p>
+								<p ><span th:text="${book.subInfo.itemPage}"></span> 페이지</p>					            			
+						    </div>									
+						</div>
+					</div>
+				</div>
+				<div class="pull bg-light text-dark" th:if="${book !=null}">
+					<div th:each="book : ${book}">
+						<div id="desciption-box" class="m-2">
+							<p class="font-weight-bold pl-2">책 소개</p>
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="book-description" th:text="${book.description}"></span>
+						</div>						
+					</div>
+				</div>
+			</div>
+			<div class="mt-4 d-flex">
+		    	<div id='calendar'></div>
+		    	<div>
+  	
+		    	</div>			
+			</div>			
+		</div>	
 	</section>
 	
 	
@@ -22,24 +50,23 @@
 	
 	<script layout:fragment="script">
 	
+	    var calendar = null;
+	    var initialLocaleCode = 'ko';
+	    var localeSelectorEl = document.getElementById('locale-selector');
+	
+		$(document).ready(function (){
+	
+	        var calendarEl = document.getElementById('calendar');
+	        calendar = new FullCalendar.Calendar(calendarEl, {
+	            headerToolbar: {
+	
+	            }
+	
+	            
+	            
+	        });
+	        calendar.render();
+		});
 
-	 
-    var calendar = null;
-    var initialLocaleCode = 'ko';
-    var localeSelectorEl = document.getElementById('locale-selector');
-
-        $(document).ready(function (){
-
-                var calendarEl = document.getElementById('calendar');
-                calendar = new FullCalendar.Calendar(calendarEl, {
-                    headerToolbar: {
-
-                    }
-
-                    
-                    
-                });
-                calendar.render();
-    });
-
+        
 	</script>
