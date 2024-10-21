@@ -6,6 +6,38 @@
 
         
 	<section layout:fragment="main-contents" class="w-75">
+	
+	
+	
+                                <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="selectTitle">계획 생성</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                          이 일정으로 결정하시겠습니까?
+                                          <br>
+                                          <br>
+									      <div class="text-danger">
+									          * 주의) 생성된 계획은 수정할 수 없습니다.
+									      </div>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                        <button type="button" class="btn btn-info" id="decideBtn">결정</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>		
+	
+	
+	
+	
+	
 		<div class="ml-5">
 			<div class="d-flex">
 				<div id="book-selection-box" class="bg-light">
@@ -20,16 +52,19 @@
 						    <div class="book-data mt-2 pl-4">							    	
 								<h4 th:text="${#strings.abbreviate(book.title,20)}" class="font-weight-bold"></h4>
 								<p ><span th:text="${#strings.abbreviate(book.author, 20)}" class="font-weight-bold"></span></p>
-								<p ><span th:text="${book.subInfo.itemPage}"></span> 페이지</p>					            			
+								<p ><span th:text="${book.subInfo.itemPage}" id="book-page" th:data-book-page="${book.subInfo.itemPage}"></span> 페이지</p>					            			
 						    </div>									
 						</div>
+   						<div class="d-flex justify-content-end pr-4 pt-4">
+   							<button type="button" onclick="location.href='/book/search-view'" class="form-control btn-dark w-25">다시 고르기</button>
+   						</div>						
 					</div>
 				</div>
 				<div class="pull bg-light text-dark" th:if="${book !=null}">
 					<div th:each="book : ${book}">
 						<div id="desciption-box" class="m-2">
 							<p class="font-weight-bold pl-2">책 소개</p>
-							&nbsp;&nbsp;&nbsp;&nbsp;<span class="book-description" th:text="${book.description}"></span>
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="book-description" th:text="${book.description}" th:data-isbn13="${book.isbn13}"></span>
 						</div>						
 					</div>
 				</div>
@@ -37,8 +72,14 @@
 			<div class="mt-4 d-flex">
 		    	<div id='calendar'></div>
 		    	<div>
-  	
-		    	</div>			
+			    	<div class="d-flex ml-5">
+		  					목표 시작일 : &nbsp;<input type="text" name="sdate" id="sdate" size="10" class="form-control date" maxlength="10">&nbsp;
+		  					목표 종료일 : &nbsp;<input type="text" name="edate" id="edate" size="10" class="form-control date" maxlength="10">		    		
+			    	</div>
+			    	<div class="d-flex justify-content-center">
+			    		<button type="button" class="form-control btn-info mt-3 ml-5 w-100" id="createBtn" data-toggle="modal" data-target="#createModal">계획 생성하기</button>
+			    	</div>   	
+		    	</div>
 			</div>			
 		</div>	
 	</section>
@@ -56,6 +97,53 @@
 	
 		$(document).ready(function (){
 	
+			$("#createBtn").on("click", function(){
+				
+
+				
+			});		
+			
+			$("#decideBtn").on("click", function(){
+				
+				let isbn13 = $(".book-description").data("isbn13");
+				let startDate = $("#sdate").val();
+				let endDate = $("#edate").val();
+				let totalPage = $("#book-page").data("book-page");
+				
+				if(isbn13 == null){
+					alert("책을 선택해주세요.");
+					return;
+				}
+				if(startDate == ""){
+					alert("시작 일자를 선택해주세요.");
+					return;
+				}
+				if(endDate == ""){
+					alert("종료 일자를 선택해주세요.");
+					return;
+				}
+				
+				$.ajax({
+					
+					type: "post"
+					, url: "/plan/create"
+					, data: {"isbn13":isbn13, "startDate":startDate, "endDate":endDate, "totalPage":totalPage}
+					, success: function(data){
+	                    if(data.result == "success") {
+	                    	alert("계획 생성 성공!")
+	                    	location.href = "/plan/progress-view";
+	                    } else {
+	                        alert("계획 생성 실패!");
+	                    }
+	                }
+	                , error:function() {
+	                    alert("계획 생성 에러!");
+	                }
+				});
+				
+			});
+			
+			
 	        var calendarEl = document.getElementById('calendar');
 	        calendar = new FullCalendar.Calendar(calendarEl, {
 	            headerToolbar: {
@@ -66,7 +154,48 @@
 	            
 	        });
 	        calendar.render();
-		});
+	        
+	        $.datepicker.regional['ko'] = {
+	                closeText: '닫기',
+	                prevText: '이전달',
+	                nextText: '다음달',
+	                currentText: '오늘',
+	                monthNames: ['1월(JAN)','2월(FEB)','3월(MAR)','4월(APR)','5월(MAY)','6월(JUN)',
+	                '7월(JUL)','8월(AUG)','9월(SEP)','10월(OCT)','11월(NOV)','12월(DEC)'],
+	                monthNamesShort: ['1월','2월','3월','4월','5월','6월',
+	                '7월','8월','9월','10월','11월','12월'],
+	                dayNames: ['일','월','화','수','목','금','토'],
+	                dayNamesShort: ['일','월','화','수','목','금','토'],
+	                dayNamesMin: ['일','월','화','수','목','금','토'],
+	                weekHeader: 'Wk',
+	                dateFormat: 'yy-mm-dd',
+	                firstDay: 0,
+	                isRTL: false,
+	                showMonthAfterYear: true,
+	                yearSuffix: '',
+	             
+	                changeMonth: true,
+	                changeYear: true,
+	                showButtonPanel: true,
+	                yearRange: 'c-99:c+99',
+	            };
+	            $.datepicker.setDefaults($.datepicker.regional['ko']);
 
+	            $('#sdate').datepicker();
+	            $('#sdate').datepicker("option", "maxDate", $("#edate").val());
+	            $('#sdate').datepicker("option", "onClose", function ( selectedDate ) {
+	                $("#edate").datepicker( "option", "minDate", selectedDate );
+	            });
+
+	            $('#edate').datepicker();
+	            $('#edate').datepicker("option", "minDate", $("#sdate").val());
+	            $('#edate').datepicker("option", "onClose", function ( selectedDate ) {
+	                $("#sdate").datepicker( "option", "maxDate", selectedDate );
+	            });
+	        
+		});
+		
+		
+		
         
 	</script>

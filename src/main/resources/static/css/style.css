@@ -84,6 +84,11 @@ header {
 	border-bottom: 10px solid transparent;
 }
 
+.date {
+	width: 110px;
+	height: 30px;
+}
+
 #progress-box {
 	width: 375px;
 	height: 225px;

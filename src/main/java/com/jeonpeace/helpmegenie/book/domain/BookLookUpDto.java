@@ -20,6 +20,7 @@ public class BookLookUpDto {
     private String author;
     private String description;
     private String cover;
+    private String isbn13;
 	
     private Map<String, Object> subInfo;
 	

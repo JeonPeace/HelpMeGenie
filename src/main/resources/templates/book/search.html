@@ -6,6 +6,36 @@
 
         
 	<section layout:fragment="main-contents" class="w-75">
+	
+	
+	
+	
+	
+                                <div class="modal fade" id="selectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="selectTitle"></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                          이 책으로 결정하시겠습니까?
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                        <button type="button" class="btn btn-info" id="selectBtn">결정</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>	
+	
+	
+	
+	
+	
+	
         			<h3 class="ml-5">알라딘 도서 검색하기</h3>
         			<div class="d-flex justify-content-center mt-3">
         				<form method="get" action="/book/search-view" class="w-100 d-flex justify-content-center">
@@ -24,7 +54,7 @@
 					            	<div th:each="searchBook : ${searchBooks}" class="m-3">
 					            		<div class="book-contents">
 					            			<div class="book-cover d-flex justify-content-center">
-							                	<img th:src="${searchBook.cover}" class="img-fluid" alt="Cover image">					            			
+							                	<img th:src="${searchBook.cover}" class="img-fluid coverLink" alt="Cover image" th:data-isbn13="${searchBook.isbn13}" th:data-book-title="${#strings.abbreviate(searchBook.title,20)}" data-toggle="modal" data-target="#selectModal">					            			
 					            			</div>
 					            			<div class="mt-2">					            				
 								                <p class="book-title"><span th:text="${#strings.abbreviate(searchBook.title,20)}" class="font-weight-bold"></span></p>
@@ -45,7 +75,7 @@
 					            <div th:each="recommendBook : ${recommendBooks}" class="m-3">
 					           		<div class="book-contents">
 					           			<div class="book-cover d-flex justify-content-center">
-							               	<img th:src="${recommendBook.cover}" class="img-fluid" alt="Cover image">					            			
+							               	<img th:src="${recommendBook.cover}" class="img-fluid coverLink" alt="Cover image" th:data-isbn13="${recommendBook.isbn13}" th:data-book-title="${#strings.abbreviate(recommendBook.title,20)}" data-toggle="modal" data-target="#selectModal">					            			
 					           			</div>
 					           			<div class="book-data mt-2">
 							                <p class="book-title"><span th:text="${#strings.abbreviate(recommendBook.title,20)}" class="font-weight-bold"></span></p>
@@ -57,4 +87,31 @@
 	       				</div>      			
         			</div>
 	</section>
+	
+	<script layout:fragment="script">
+	
+		$(document).ready(function(){
+			
+			$(".coverLink").on("click", function(){
+				
+				let isbn13 = $(this).data("isbn13");
+				let title = $(this).data("book-title");
+				
+				$("#selectTitle").text(title);
+				$("#selectBtn").data("isbn13", isbn13);
+				
+			});
+			
+			$("#selectBtn").on("click", function(){
+				
+				let isbn13 = $(this).data("isbn13");
+				
+				location.href = "/plan/new-plan-view?isbn13=" + isbn13;
+				
+			});
+			
+			
+		});
+	
+	</script>
         

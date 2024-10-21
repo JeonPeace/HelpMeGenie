@@ -1,7 +1,7 @@
 package com.jeonpeace.helpmegenie.plan.domain;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -34,10 +34,10 @@ public class Plan {
 	private String isbn13;
 	
 	@Column(name="startDate")
-	private Date startDate;
+	private LocalDate startDate;
 	
 	@Column(name="endDate")
-	private Date endDate;
+	private LocalDate endDate;
 	
 	@Column(name="totalPage")
 	private int totalPage;

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jeonpeace.helpmegenie.api.service.AladinApiService;
 import com.jeonpeace.helpmegenie.book.domain.BookLookUpDto;
@@ -29,6 +30,8 @@ public class PlanController {
 	@GetMapping("/progress-view")
 	public String progressView(Model model) {
 		
+		
+		
 		List<BookLookUpDto> lookUpBook = aladinApiService.getBookByIsbn("9788932917245");
 		
 		model.addAttribute("book", lookUpBook);
@@ -37,9 +40,9 @@ public class PlanController {
 	}
 	
 	@GetMapping("/new-plan-view")
-	public String createPlan(Model model) {
+	public String createPlan(@RequestParam(value="isbn13", required=false) String isbn13, Model model) {
 		
-		List<BookLookUpDto> lookUpBook = aladinApiService.getBookByIsbn("9788932917245");
+		List<BookLookUpDto> lookUpBook = aladinApiService.getBookByIsbn(isbn13);
 		
 		model.addAttribute("book", lookUpBook);
 		
