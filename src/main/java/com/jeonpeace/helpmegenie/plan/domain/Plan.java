@@ -16,12 +16,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Table(name="plan")
+@Setter
+@Table(name="`plan`")
 @Entity
 public class Plan {
 
@@ -31,6 +33,7 @@ public class Plan {
 	
 	private int userId;
 	
+	@Column(name="isbn13")
 	private String isbn13;
 	
 	@Column(name="startDate")

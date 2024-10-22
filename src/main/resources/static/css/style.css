@@ -114,6 +114,11 @@ header {
 	height: 500px;
 }
 
+#new-plan {
+	width: 1000px;
+	height: 800px;
+}
+
 footer {
     height: 70px;
 

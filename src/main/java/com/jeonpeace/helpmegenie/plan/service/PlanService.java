@@ -1,8 +1,11 @@
 package com.jeonpeace.helpmegenie.plan.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jeonpeace.helpmegenie.plan.domain.Plan;
 import com.jeonpeace.helpmegenie.plan.repository.PlanRepository;
@@ -37,11 +40,60 @@ public class PlanService {
 		return result;
 	}
 
-	public Plan getPlan(int userid) {
+	public Plan getPlanUnFinished(int userId) {
 		
-		Plan plan = planRepository.findByUserId(userid);
+		Plan plan = planRepository.findByUserIdAndFinished(userId, false);
 		
 		return plan;
+	}
+	
+	public String getIsbn13(int planId) {
+		
+		String isbn13 = planRepository.getIsbn13ById(planId);
+		
+		return isbn13;
+	}
+	
+	@Transactional
+	public List<Integer> addPage(int planId, int addPage) {
+		
+		Plan plan = planRepository.findById(planId);
+		
+		List<Integer> pageList = new ArrayList<>();
+		
+		int donePage = plan.getDonePage();
+		pageList.add(donePage);
+		
+		donePage = donePage + addPage;
+		pageList.add(donePage);
+		
+		plan.setDonePage(donePage);
+		
+		return pageList;
+	}
+	
+	@Transactional
+	public boolean endPlan(int planId) {
+		
+		Plan plan = planRepository.findById(planId);
+		
+		plan.setFinished(true);
+		
+		return plan.isFinished();
+	}
+	
+	@Transactional
+	public String deletePlan(int planId) {
+		
+		Plan plan = planRepository.findById(planId);
+		
+		if(plan != null) {
+			planRepository.delete(plan);
+			return "success";
+		}else {
+			return "fail";
+		}
+		
 	}
 	
 }

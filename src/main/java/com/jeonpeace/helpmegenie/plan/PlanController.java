@@ -10,15 +10,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jeonpeace.helpmegenie.api.service.AladinApiService;
 import com.jeonpeace.helpmegenie.book.domain.BookLookUpDto;
+import com.jeonpeace.helpmegenie.plan.domain.Plan;
+import com.jeonpeace.helpmegenie.plan.service.PlanService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/plan")
 public class PlanController {
 
 	private AladinApiService aladinApiService;
+	private PlanService planService;
 	
-	public PlanController(AladinApiService aladinApiService) {
+	public PlanController(AladinApiService aladinApiService, PlanService planService) {
 		this.aladinApiService = aladinApiService;
+		this.planService = planService;
 	}
 	
 	@GetMapping("/test-view")
@@ -28,13 +34,22 @@ public class PlanController {
 	}
 	
 	@GetMapping("/progress-view")
-	public String progressView(Model model) {
+	public String progressView(HttpSession session
+								, Model model) {
 		
+		int userId = (Integer)session.getAttribute("userId");
 		
+		Plan plan = planService.getPlanUnFinished(userId);
 		
-		List<BookLookUpDto> lookUpBook = aladinApiService.getBookByIsbn("9788932917245");
-		
-		model.addAttribute("book", lookUpBook);
+		if(plan != null) {
+			String isbn13 = planService.getIsbn13(plan.getId());
+			List<BookLookUpDto> lookUpBook = aladinApiService.getBookByIsbn(isbn13);
+			model.addAttribute("book", lookUpBook);
+
+			model.addAttribute("plan", plan);	
+		}
+
+
 		
 		return "/plan/progress";
 	}
