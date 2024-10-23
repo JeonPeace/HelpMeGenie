@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" 
+    xmlns:th="http://www.thymeleaf.org" 
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/leftDefault}">
+
+        
+	<section layout:fragment="main-contents" class="w-75 ml-5 ">
+		
+		<h3>독후감 작성하기</h3>
+		<div th:if="${planList == null}">
+			완료한 독서 계획이 없습니다. 새로운 독서를 시작해보세요.
+		</div>
+		<div th:if="${planList != null}" class="d-flex flex-wrap justify-content-between">
+			<div th:each="plan : ${planList}">
+				<div class="book-contents">
+					<div class="d-flex justify-content-center">
+						<img th:src="${plan.cover}">				
+					</div>
+					<div class="mt-2 ml-1">
+						<p class="book-title font-weight-bold" th:text="${#strings.abbreviate(plan.title, 20)}"></p>
+						<p class="book-author font-weight-bold" th:text="${#strings.abbreviate(plan.author, 20)}"></p>					
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+
+
+	<script layout:fragment="script">
+	
+	
+	
+	</script>

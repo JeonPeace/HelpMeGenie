@@ -36,6 +36,15 @@ public class Plan {
 	@Column(name="isbn13")
 	private String isbn13;
 	
+	@Column(name="cover")
+	private String cover;
+	
+	@Column(name="title")
+	private String title;
+	
+	@Column(name="author")
+	private String author;
+	
 	@Column(name="startDate")
 	private LocalDate startDate;
 	

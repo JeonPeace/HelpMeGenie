@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jeonpeace.helpmegenie.api.service.AladinApiService;
+import com.jeonpeace.helpmegenie.book.domain.BookLookUpDto;
 import com.jeonpeace.helpmegenie.plan.domain.Plan;
 import com.jeonpeace.helpmegenie.plan.repository.PlanRepository;
 
@@ -14,9 +16,11 @@ import com.jeonpeace.helpmegenie.plan.repository.PlanRepository;
 public class PlanService {
 
 	private PlanRepository planRepository;
+	private AladinApiService aladinApiService;
 	
-	public PlanService(PlanRepository planRepository) {
+	public PlanService(PlanRepository planRepository, AladinApiService aladinApiService) {
 		this.planRepository = planRepository;
+		this.aladinApiService = aladinApiService;
 	}
 	
 	public Plan addPlan(int userId
@@ -25,9 +29,18 @@ public class PlanService {
 						, LocalDate endDate
 						, int totalPage) {
 		
+		List<BookLookUpDto> lookUpBook = aladinApiService.getBookByIsbn(isbn13);
+		
+		String cover = lookUpBook.get(0).getCover();
+		String title = lookUpBook.get(0).getTitle();
+		String author = lookUpBook.get(0).getAuthor();
+		
 		Plan plan = Plan.builder()
 						.userId(userId)
 						.isbn13(isbn13)
+						.cover(cover)
+						.title(title)
+						.author(author)
 						.startDate(startDate)
 						.endDate(endDate)
 						.totalPage(totalPage)
@@ -42,9 +55,20 @@ public class PlanService {
 
 	public Plan getPlanUnFinished(int userId) {
 		
-		Plan plan = planRepository.findByUserIdAndFinished(userId, false);
+		List<Plan> planList = planRepository.findByUserIdAndFinished(userId, false);
 		
-		return plan;
+		if(planList.size() > 0) {
+			return planList.get(0);
+		}else {
+			return null;
+		}	
+	}
+	
+	public List<Plan> getPlanFinished(int userId) {
+		
+		List<Plan> planList = planRepository.findByUserIdAndFinished(userId, true);
+		
+		return planList;
 	}
 	
 	public String getIsbn13(int planId) {
@@ -93,7 +117,6 @@ public class PlanService {
 		}else {
 			return "fail";
 		}
-		
 	}
 	
 }

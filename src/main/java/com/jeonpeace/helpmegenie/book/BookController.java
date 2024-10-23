@@ -15,7 +15,7 @@ import com.jeonpeace.helpmegenie.book.domain.BookSearchDto;
 @RequestMapping("/book")
 public class BookController {
 
-    private final AladinApiService aladinApiService;
+    private AladinApiService aladinApiService;
 
     public BookController(AladinApiService aladinApiService) {
         this.aladinApiService = aladinApiService;

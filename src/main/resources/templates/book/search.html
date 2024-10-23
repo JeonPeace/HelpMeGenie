@@ -56,7 +56,7 @@
 					            			<div class="book-cover d-flex justify-content-center">
 							                	<img th:src="${searchBook.cover}" class="img-fluid coverLink" alt="Cover image" th:data-isbn13="${searchBook.isbn13}" th:data-book-title="${#strings.abbreviate(searchBook.title,20)}" data-toggle="modal" data-target="#selectModal">					            			
 					            			</div>
-					            			<div class="mt-2">					            				
+					            			<div class="book-data mt-2">					            				
 								                <p class="book-title"><span th:text="${#strings.abbreviate(searchBook.title,20)}" class="font-weight-bold"></span></p>
 								                <p class="book-author"><span th:text="${#strings.abbreviate(searchBook.author, 20)}" class="font-weight-bold"></span></p>						            			
 					            			</div>			            		
