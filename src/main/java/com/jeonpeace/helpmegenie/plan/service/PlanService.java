@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeonpeace.helpmegenie.api.service.AladinApiService;
-import com.jeonpeace.helpmegenie.book.domain.BookLookUpDto;
+import com.jeonpeace.helpmegenie.book.dto.BookLookUpDto;
 import com.jeonpeace.helpmegenie.plan.domain.Plan;
 import com.jeonpeace.helpmegenie.plan.repository.PlanRepository;
 
@@ -117,6 +117,13 @@ public class PlanService {
 		}else {
 			return "fail";
 		}
+	}
+	
+	public Plan findPlanById(int planId) {
+		
+		Plan plan = planRepository.findById(planId);
+		
+		return plan;
 	}
 	
 }

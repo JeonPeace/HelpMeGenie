@@ -3,8 +3,8 @@ package com.jeonpeace.helpmegenie.api.repository;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.jeonpeace.helpmegenie.book.domain.LookUpResponseDto;
-import com.jeonpeace.helpmegenie.book.domain.SearchResponseDto;
+import com.jeonpeace.helpmegenie.book.dto.LookUpResponseDto;
+import com.jeonpeace.helpmegenie.book.dto.SearchResponseDto;
 
 import reactor.core.publisher.Mono;
 

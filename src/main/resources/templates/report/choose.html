@@ -5,17 +5,47 @@
         layout:decorate="~{layouts/leftDefault}">
 
         
-	<section layout:fragment="main-contents" class="w-75 ml-5 ">
+	<section layout:fragment="main-contents" class="w-75">
+
+
+
+	
+	
+                                <div class="modal fade" id="selectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="selectTitle"></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                          이 책으로 결정하시겠습니까?
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                        <button type="button" class="btn btn-info" id="selectBtn">결정</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>	
+	
+	
+	
+
+
 		
-		<h3>독후감 작성하기</h3>
+		<h3 class="ml-5">독후감 작성하기</h3>
+		<h6 class="ml-5">- 독후감을 작성할 책을 선택해주세요.</h6>
 		<div th:if="${planList == null}">
 			완료한 독서 계획이 없습니다. 새로운 독서를 시작해보세요.
 		</div>
-		<div th:if="${planList != null}" class="d-flex flex-wrap justify-content-between">
+		<div th:if="${planList != null}" class="d-flex flex-wrap ml-3">
 			<div th:each="plan : ${planList}">
-				<div class="book-contents">
+				<div class="book-contents m-3">
 					<div class="d-flex justify-content-center">
-						<img th:src="${plan.cover}">				
+						<img th:src="${plan.cover}" class="coverLink" th:data-plan-id="${plan.id}" th:data-book-title="${plan.title}" data-toggle="modal" data-target="#selectModal">				
 					</div>
 					<div class="mt-2 ml-1">
 						<p class="book-title font-weight-bold" th:text="${#strings.abbreviate(plan.title, 20)}"></p>
@@ -30,6 +60,27 @@
 
 	<script layout:fragment="script">
 	
-	
+	$(document).ready(function(){
+		
+		$(".coverLink").on("click", function(){
+			
+			let planId = $(this).data("plan-id");
+			let title = $(this).data("book-title");
+			
+			$("#selectTitle").text(title);
+			$("#selectBtn").data("planId", planId);
+			
+		});
+		
+		$("#selectBtn").on("click", function(){
+			
+			let planId = $(this).data("planId");
+			
+			location.href = "/report/create-view?planId=" + planId;
+			
+		});
+		
+		
+	});
 	
 	</script>

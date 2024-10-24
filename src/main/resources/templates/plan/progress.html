@@ -59,7 +59,7 @@
 							<br>
 							오늘 읽은 페이지 수
 							<br>
-							추가하기 : <input type="number" class="w-25" id="addPage" th:data-plan-id="${plan.id}"> p	    
+							<span th:each="book : ${book}">추가하기 : <input type="number" class="w-25" id="addPage" th:data-plan-id="${plan.id}" th:max="${book.subInfo.itemPage - plan.donePage}"> p</span>	    
 					    </div>
 						<div class="d-flex justify-content-end pt-3 pr-3">
 							<button type="button" class="form-control btn-secondary w-25" id="addPageBtn">저장</button>

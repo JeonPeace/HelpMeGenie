@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jeonpeace.helpmegenie.api.service.AladinApiService;
-import com.jeonpeace.helpmegenie.book.domain.BookSearchDto;
+import com.jeonpeace.helpmegenie.book.dto.BookSearchDto;
 
 @Controller
 @RequestMapping("/book")

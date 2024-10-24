@@ -1,4 +1,4 @@
-package com.jeonpeace.helpmegenie.book.domain;
+package com.jeonpeace.helpmegenie.book.dto;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LookUpResponseDto {
-
-	private List<BookLookUpDto> item;
+public class SearchResponseDto {
 	
+    private List<BookSearchDto> item;
+
 }

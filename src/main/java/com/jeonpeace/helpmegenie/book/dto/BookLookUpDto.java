@@ -1,4 +1,4 @@
-package com.jeonpeace.helpmegenie.book.domain;
+package com.jeonpeace.helpmegenie.book.dto;
 
 import java.util.Map;
 

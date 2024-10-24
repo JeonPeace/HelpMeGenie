@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jeonpeace.helpmegenie.api.service.AladinApiService;
-import com.jeonpeace.helpmegenie.book.domain.BookLookUpDto;
+import com.jeonpeace.helpmegenie.book.dto.BookLookUpDto;
 import com.jeonpeace.helpmegenie.plan.domain.Plan;
 import com.jeonpeace.helpmegenie.plan.service.PlanService;
 

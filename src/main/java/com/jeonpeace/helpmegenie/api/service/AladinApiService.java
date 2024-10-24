@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.jeonpeace.helpmegenie.api.repository.AladinApiRepository;
-import com.jeonpeace.helpmegenie.book.domain.BookLookUpDto;
-import com.jeonpeace.helpmegenie.book.domain.BookSearchDto;
-import com.jeonpeace.helpmegenie.book.domain.LookUpResponseDto;
-import com.jeonpeace.helpmegenie.book.domain.SearchResponseDto;
+import com.jeonpeace.helpmegenie.book.dto.BookLookUpDto;
+import com.jeonpeace.helpmegenie.book.dto.BookSearchDto;
+import com.jeonpeace.helpmegenie.book.dto.LookUpResponseDto;
+import com.jeonpeace.helpmegenie.book.dto.SearchResponseDto;
 
 @Service
 public class AladinApiService {

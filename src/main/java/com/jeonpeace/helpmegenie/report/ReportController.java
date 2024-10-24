@@ -6,10 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.jeonpeace.helpmegenie.api.service.AladinApiService;
 import com.jeonpeace.helpmegenie.plan.domain.Plan;
 import com.jeonpeace.helpmegenie.plan.service.PlanService;
+import com.jeonpeace.helpmegenie.report.dto.Gallery;
+import com.jeonpeace.helpmegenie.report.service.GalleryService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -18,10 +20,12 @@ import jakarta.servlet.http.HttpSession;
 public class ReportController {
 
 	private PlanService planService;
+	private GalleryService galleryService;
 
 
-	public ReportController(PlanService planService, AladinApiService aladinApiService) {
+	public ReportController(PlanService planService, GalleryService galleryService) {
 		this.planService = planService;
+		this.galleryService = galleryService;
 	}
 	
 	
@@ -39,9 +43,22 @@ public class ReportController {
 	}
 	
 	@GetMapping("/create-view")
-	public String createView() {
+	public String createView(@RequestParam("planId") int planId
+							, Model model) {
+		
+		Plan plan = planService.findPlanById(planId);
+		
+		model.addAttribute("plan", plan);
 		
 		return "/report/create";
+	}
+	
+	@GetMapping("/gallery-view")
+	public String galleryView(Model model) {
+		
+		List<Gallery> galleryList = galleryService.getReportList();
+		
+		return "/report/gallery";
 	}
 	
 }
