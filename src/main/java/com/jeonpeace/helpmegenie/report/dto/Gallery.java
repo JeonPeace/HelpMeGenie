@@ -11,6 +11,10 @@ public class Gallery {
 	private int userId;
 	private int userLoginId;
 	
+	private String cover;
+	private String author;
+	private String title;
+	
 	private String contents;
 	
 }

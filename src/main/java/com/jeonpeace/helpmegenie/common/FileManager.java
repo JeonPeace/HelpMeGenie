@@ -14,18 +14,11 @@ public class FileManager {
 	public static final String FILE_UPLOAD_PATH = "C:\\jeonpeace\\upload\\helpmegenie";
 	
 	// 파일 저장
-	public static String saveFile(int userId, MultipartFile file) {
+	public static String saveFile(int userId, MultipartFile file) throws Exception {
 		
-		if(file == null) {
-			return null;
+		if(file.isEmpty()) {
+			throw new Exception("Failed to store empty file " + file.getOriginalFilename());
 		}
-		
-		// 같은 파일이름으로 전달 될 경우
-		// 폴더를 만들어서 파일 저장
-		// 로그인 사용자 userId를 폴더 이름으로 사용
-		// 현재 시간 정보를 폴더 이름으로 사용
-		// UNIX TIME: 1970년 1월 1일부터 흐른 시간을 mili second(1/1000초)로 표현한 값
-		// ex) 2_938091328
 		
 		String directoryName = "/" + userId + "_" + System.currentTimeMillis();
 		

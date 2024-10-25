@@ -6,8 +6,19 @@
 
 
 	<section layout:fragment="main-contents" class="w-75">
-		<div th:utext="${report.contents}">
-			
+		<div th:each="gallery, status:${galleryList}" class="gallery-contents ml-3">
+			<div class="d-flex">
+				<div class="book-contents">
+					<div class="d-flex justify-content-center">
+						<img th:src="${gallery.cover}">				
+					</div>
+					<div class="mt-2 ml-1">
+						<p class="book-title font-weight-bold" th:text="${#strings.abbreviate(gallery.title, 20)}"></p>
+						<p class="book-author font-weight-bold" th:text="${#strings.abbreviate(gallery.author, 20)}"></p>					
+					</div>
+				</div>
+				<span th:utext=${gallery.contents}></span>
+			</div>
 		</div>
 	</section>     
         
@@ -16,29 +27,7 @@
 	<script layout:fragment="script">
 	
 	$(document).ready(function(){
-		$("#summernote").summernote({
-			  height: 400,                 // 에디터 높이
-			  minHeight: 400,             // 최소 높이
-			  maxHeight: 700,             // 최대 높이
-			  focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
-			  lang: "ko-KR",					// 한글 설정
-			  placeholder: '책을 통해 느낀 감정을 자유롭게 펼쳐주세요!',	//placeholder 설정
-			  toolbar: [
-				    // [groupName, [list of button]]
-				    ['fontname', ['fontname']],
-				    ['fontsize', ['fontsize']],
-				    ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
-				    ['color', ['forecolor','color']],
-				    ['table', ['table']],
-				    ['para', ['ul', 'ol', 'paragraph']],
-				    ['height', ['height']],
-				    ['insert',['picture','link','video']],
-				    ['view', ['fullscreen', 'help']]
-				  ],
-				fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'],
-				fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72']
-		});		
-		
+
 		
 	});
 	

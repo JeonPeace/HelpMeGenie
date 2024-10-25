@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.jeonpeace.helpmegenie.plan.domain.Plan;
+import com.jeonpeace.helpmegenie.plan.repository.PlanRepository;
 import com.jeonpeace.helpmegenie.report.domain.Report;
 import com.jeonpeace.helpmegenie.report.dto.Gallery;
 import com.jeonpeace.helpmegenie.report.repository.ReportRepository;
@@ -13,9 +15,11 @@ import com.jeonpeace.helpmegenie.report.repository.ReportRepository;
 public class GalleryService {
 
 	private ReportRepository reportRepository;
+	private PlanRepository planRepository;
 	
-	public GalleryService(ReportRepository reportRepository) {
+	public GalleryService(ReportRepository reportRepository, PlanRepository planRepository) {
 		this.reportRepository = reportRepository;
+		this.planRepository = planRepository;
 	}
 	
 	public List<Gallery> getReportList(){
@@ -26,10 +30,17 @@ public class GalleryService {
 		
 		for(Report report:reportList) {
 			
+			int planId = report.getPlanId();
+			
+			Plan plan = planRepository.findById(planId);
+			
 			Gallery gallery = Gallery.builder()
 									 .reportId(report.getId())
 									 .userId(report.getUserId())
 									 .contents(report.getContents())
+									 .cover(plan.getCover())
+									 .title(plan.getTitle())
+									 .author(plan.getAuthor())
 									 .build();
 			
 			

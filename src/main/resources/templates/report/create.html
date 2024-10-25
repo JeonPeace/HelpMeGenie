@@ -16,16 +16,14 @@
 			</div>
 		</div>
 		<div class="ml-3">
-			<form method="post">
-			  <textarea id="summernote" name="editordata"></textarea>
-			</form>			
+			<textarea id="summernote" name="contents"></textarea>
 		</div>	
 		<div class="d-flex justify-content-between mt-2 ml-2">
 			<div>
 				<button type="button" onclick="location.href='/report/choose-view'" class="form-control btn-dark"> 책 다시 고르기</button>
 			</div>
 			<div>
-				<button id="saveBtn" type="button" class="form-control btn-info">게시</button>
+				<button id="saveBtn" type="submit" class="form-control btn-info" th:data-plan-id="${plan.id}">게시</button>
 			</div>	
 		</div>		
 	
@@ -58,17 +56,27 @@
 				    ['view', ['fullscreen', 'help']]
 				  ],
 				fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'],
-				fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72']
+				fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
+				callbacks : {                                                  
+					onImageUpload : function(files, editor, welEditable) {       
+						for (var i = 0; i < files.length; i++) {
+							sendFile(files[i], this);
+						}
+					}
+				}
+				
+		
 		});		
 		
 		$("#saveBtn").on("click", function(){
 			
 			let contents = $("#summernote").val();
+			let planId = $(this).data("plan-id");
 			
 			$.ajax({
 				type: "post"
 					, url: "/report/create"
-					, data: {"contents":contents}
+					, data: {"contents":contents, "planId":planId}
 					, success: function(data){
 	                    if(data.result == "success") {
 	                    	alert("독후감 생성 성공!")
@@ -83,7 +91,32 @@
 				});
 			});
 			
+		
+		
 		});
 		
+	
+	
+	function sendFile(file, el) {
+		var form_data = new FormData();
+		form_data.append('file', file);
+		
+		$.ajax({                                                              
+			data : form_data,
+			type : "POST",
+			url : '/image',
+			cache : false,
+			contentType : false,
+			enctype : 'multipart/form-data',                                  
+			processData : false,
+			success : function(url) {                                         
+				$(el).summernote('insertImage', url, function($image) {
+					$image.css('width', "25%");
+				});
+			}
+		});
+	}
+
+	
 	
 	</script>

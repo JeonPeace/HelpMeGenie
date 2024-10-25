@@ -14,10 +14,11 @@ public class ReportService {
 		this.reportRepository = reportRepository;
 	}
 	
-	public Report addReport(int userId, String contents) {
+	public Report addReport(int userId, int planId, String contents) {
 		
 		Report report = Report.builder()
 							  .userId(userId)
+							  .planId(planId)
 							  .contents(contents)
 							  .build();
 		

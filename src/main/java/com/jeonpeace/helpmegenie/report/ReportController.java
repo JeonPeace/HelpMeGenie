@@ -58,6 +58,8 @@ public class ReportController {
 		
 		List<Gallery> galleryList = galleryService.getReportList();
 		
+		model.addAttribute("galleryList", galleryList);
+		
 		return "/report/gallery";
 	}
 	

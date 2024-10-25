@@ -25,11 +25,12 @@ public class ReportRestController {
 	
 	@PostMapping("/create")
 	public Map<String, String> createReport(@RequestParam("contents") String contents
+										    , @RequestParam("planId") int planId
 											, HttpSession session){
 		
 		int userId = (Integer)session.getAttribute("userId");
 		
-		Report report = reportService.addReport(userId, contents);
+		Report report = reportService.addReport(userId, planId, contents);
 		
 		Map<String, String> resultMap = new HashMap<>();
 		
