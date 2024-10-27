@@ -29,8 +29,8 @@ public class Image {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="reportId")
-	private int reportId;
+	@Column(name="planId")
+	private int planId;
 	
 	@Column(name="imagePath")
 	private String imagePath;

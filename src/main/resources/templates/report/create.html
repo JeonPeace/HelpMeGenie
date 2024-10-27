@@ -98,18 +98,22 @@
 	
 	
 	function sendFile(file, el) {
+		
+		let planId = $("#saveBtn").data("plan-id");
+		
 		var form_data = new FormData();
-		form_data.append('file', file);
+		form_data.append('imageFile', file);
+		form_data.append('planId', planId);
 		
 		$.ajax({                                                              
-			data : form_data,
-			type : "POST",
-			url : '/image',
+			type : "post",
+			url : "/image/save",
+			data: form_data,
 			cache : false,
 			contentType : false,
-			enctype : 'multipart/form-data',                                  
+			enctype : "multipart/form-data",                                  
 			processData : false,
-			success : function(url) {                                         
+			success : function(url) {                    
 				$(el).summernote('insertImage', url, function($image) {
 					$image.css('width', "25%");
 				});
