@@ -32,6 +32,9 @@ public class Image {
 	@Column(name="planId")
 	private int planId;
 	
+	@Column(name="reportId")
+	private int reportId;
+	
 	@Column(name="imagePath")
 	private String imagePath;
 	

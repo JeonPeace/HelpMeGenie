@@ -21,7 +21,7 @@ header {
 
 .main-contents {
 	width: 1500px;
-	height: 1200px;
+
 }
 
 .main-menu {
@@ -34,8 +34,23 @@ header {
 }
 
 .book-contents {
-	width: 200px;
+	width: 150px;
 	height: 330px;
+}
+
+.gallery-segment {
+	width: 1200px;
+	height: 330px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	background-color: #EBEBEB;
+}
+
+.gallery-contents {
+	width: 1000px;
+	height: 250px;
+
 }
 
 .book-cover {
@@ -116,6 +131,10 @@ header {
 #new-plan {
 	width: 1000px;
 	height: 800px;
+}
+
+#detailBtns {
+	width: 500px;
 }
 
 footer {

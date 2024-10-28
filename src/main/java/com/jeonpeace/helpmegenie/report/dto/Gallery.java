@@ -9,7 +9,7 @@ public class Gallery {
 
 	private int reportId;
 	private int userId;
-	private int userLoginId;
+	private String userLoginId;
 	
 	private String cover;
 	private String author;

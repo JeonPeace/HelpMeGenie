@@ -10,4 +10,6 @@ public interface ReportRepository extends JpaRepository<Report, Integer>{
 
 	public List<Report> findTop5ByOrderByIdDesc();
 	
+	public List<Report> findByOrderByIdDesc();
+	
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jeonpeace.helpmegenie.image.service.ImageService;
 import com.jeonpeace.helpmegenie.report.domain.Report;
 import com.jeonpeace.helpmegenie.report.service.ReportService;
 
@@ -18,6 +19,7 @@ import jakarta.servlet.http.HttpSession;
 public class ReportRestController {
 
 	private ReportService reportService;
+	private ImageService imageService;
 	
 	public ReportRestController(ReportService reportService) {
 		this.reportService = reportService;
@@ -31,6 +33,7 @@ public class ReportRestController {
 		int userId = (Integer)session.getAttribute("userId");
 		
 		Report report = reportService.addReport(userId, planId, contents);
+		
 		
 		Map<String, String> resultMap = new HashMap<>();
 		

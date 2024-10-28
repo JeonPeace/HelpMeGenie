@@ -1,5 +1,7 @@
 package com.jeonpeace.helpmegenie.user.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -57,4 +59,14 @@ public class UserService {
 		
 		return user;
 	}
+	
+	public User getUserById(int userId) {
+		
+		Optional<User> optionalUser = userRepository.findById(userId);
+		
+		User user = optionalUser.orElse(null);
+
+		return user;
+	}
+	
 }

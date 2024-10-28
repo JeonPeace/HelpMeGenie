@@ -1,5 +1,7 @@
 package com.jeonpeace.helpmegenie.report.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.jeonpeace.helpmegenie.report.domain.Report;
@@ -25,6 +27,15 @@ public class ReportService {
 		Report result = reportRepository.save(report);
 		
 		return result;
+	}
+	
+	public Report getReport(int reportId) {
+		
+		Optional<Report> optionalReport = reportRepository.findById(reportId);
+		
+		Report report = optionalReport.orElse(null);
+		
+		return report;
 	}
 	
 }
