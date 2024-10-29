@@ -4,13 +4,18 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.jeonpeace.helpmegenie.report.domain.Comment;
 import com.jeonpeace.helpmegenie.report.domain.Report;
+import com.jeonpeace.helpmegenie.report.repository.CommentRepository;
 import com.jeonpeace.helpmegenie.report.repository.ReportRepository;
+import com.jeonpeace.helpmegenie.user.domain.User;
+import com.jeonpeace.helpmegenie.user.service.UserService;
 
 @Service
 public class ReportService {
 
 	private ReportRepository reportRepository;
+
 	
 	public ReportService(ReportRepository reportRepository) {
 		this.reportRepository = reportRepository;
@@ -37,5 +42,6 @@ public class ReportService {
 		
 		return report;
 	}
+
 	
 }

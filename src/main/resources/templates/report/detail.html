@@ -6,7 +6,7 @@
 
 
 	<section layout:fragment="main-contents" class="w-75">
-		<div class=" p-2 bg-secondary">
+		<div class=" p-2 bg-light ml-3">
 			<div class="d-flex ml-3">
 				<div class="d-flex justify-content-center">
 					<img th:src="${plan.cover}">				
@@ -18,13 +18,13 @@
 					작성일 : <span th:text="${#temporals.format(report.createdAt, 'yyyy-MM-dd')}"></span>
 					<div class="d-flex justify-content-between">
 						<div>
-	                        <i class="bi bi-heart-fill text-danger unlikeBtn"></i>
-	                        <i class="bi bi-heart likeBtn"></i>
-	                        <span >11</span>						
+                            <i th:if="${loginUserLike}" class="bi bi-heart-fill text-danger unlikeBtn" th:data-report-id="${report.id}"></i>
+                            <i th:unless="${loginUserLike}" class="bi bi-heart likeBtn" th:data-report-id="${report.id}"></i>
+	                        <span th:text="${likeCount}">11</span>						
 						</div>
 						<div>
 	                        <i class="bi bi-chat-right-text commentBtn"></i>
-	                        <span>12</span>						
+	                        <span th:text="${commentCount}">12</span>						
 						</div>       
 					</div> 					
 				</div>			
@@ -35,12 +35,12 @@
 		</div>
 		<div class="d-flex justify-content-between mt-2 ml-2">
 			<div>
-				<button type="button" onclick="location.href='/report/choose-view'" class="form-control btn-dark">댓글</button>
+				<button type="button" id="commentBtn" class="form-control btn-dark" th:data-report-id="${report.id}">댓글</button>
 			</div>
 			<div class="d-flex justify-content-between" id="detailBtns">
 				<button type="button" class="form-control btn-danger btn-sm">삭제하기</button>
-				<button id="saveBtn" type="button" class="form-control btn-info btn-sm">게시</button>
-				<button type="button" class="form-control btn-dark btn-sm">목록으로</button>
+				<button id="saveBtn" type="button" class="form-control btn-info btn-sm">수정하기</button>
+				<button type="button" onclick="location.href='/report/gallery-view'" class="form-control btn-dark btn-sm">목록으로</button>
 			</div>	
 		</div>		
 	</section>
@@ -51,6 +51,62 @@
 	
 	$(document).ready(function(){
 
+        $(".likeBtn").on("click", function(){
+            
+            let reportId = $(this).data("report-id");
+
+            $.ajax({
+                
+                type: "post"
+                , url: "/report/like"
+                , data: {"reportId":reportId}
+                , success: function(data){
+                    if(data.result == "success"){
+                        alert("좋아요 완료!");
+                        location.reload();
+                    }else{
+                        alert("좋아요 실패!!");
+                    }
+                }
+                , error: function(){
+                    alert("좋아요 에러!!");
+                }
+            });             
+            
+        });
+        
+       $(".unlikeBtn").on("click", function(){
+            
+            let reportId = $(this).data("report-id");
+
+            $.ajax({
+                
+                type: "delete"
+                , url: "/report/unlike"
+                , data: {"reportId":reportId}
+                , success: function(data){
+                    if(data.result == "success"){
+                        alert("좋아요 해제 완료!");
+                        location.reload();
+                    }else{
+                        alert("좋아요 해제 실패!!");
+                    }
+                }
+                , error: function(){
+                    alert("좋아요 해제 에러!!");
+                }
+            });             
+            
+        });		
+		
+		
+		$("#commentBtn").on("click", function(){
+			
+			let reportId = $(this).data("report-id");
+			
+			location.href = "/report/comment-view?reportId=" + reportId;
+			
+		});
 		
 	});
 	

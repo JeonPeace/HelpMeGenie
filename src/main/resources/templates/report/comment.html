@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko" 
+    xmlns:th="http://www.thymeleaf.org" 
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/leftDefault}">
+
+
+	<section layout:fragment="main-contents" class="w-75">
+	
+	
+            
+                                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">삭제</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        정말로 삭제하시겠습니까?
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                        <button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>            
+        	
+	
+	
+	
+		<div class=" p-2 ml-3">
+			<div class="d-flex p-3 bg-light">
+				<div class="d-flex justify-content-center">
+					<img th:src="${plan.cover}" class="coverLink" th:data-report-id="${report.id}">				
+				</div>
+				<div class="pt-2 pl-3 bg-light">
+					<p class="book-title font-weight-bold" th:text="${#strings.abbreviate(plan.title, 20)}"></p>
+					<p class="book-author font-weight-bold" th:text="${#strings.abbreviate(plan.author, 20)}"></p>
+					작성자 : <span th:text="${user.loginId}"></span><br>
+					작성일 : <span th:text="${#temporals.format(report.createdAt, 'yyyy-MM-dd')}"></span>
+					<div class="d-flex justify-content-between">
+						<div>
+                            <i th:if="${loginUserLike}" class="bi bi-heart-fill text-danger unlikeBtn" th:data-report-id="${report.id}"></i>
+                            <i th:unless="${loginUserLike}" class="bi bi-heart likeBtn" th:data-report-id="${report.id}"></i>
+	                        <span th:text="${likeCount}">11</span>						
+						</div>
+						<div>
+	                        <i class="bi bi-chat-right-text commentBtn"></i>
+	                        <span th:text="${commentCount}">12</span>						
+						</div>       
+					</div> 					
+				</div>			
+			</div>
+
+			<div th:each="comment, status:${commentList}" class="ml-3 mt-3">
+                <div class="d-flex">
+                    <div class="w-75 d-flex">
+                       <b th:text="${comment.userLoginId}">bada</b>
+                       <span class="ml-2" th:text=${comment.commentText}>우하하하</span>                                 
+                    </div>
+                   <div th:if="${session.userId == comment.userId}" class="d-flex justify-content-end w-25">
+                       <i class="bi bi-trash commentDeleteIcon" data-toggle="modal" data-target="#deleteModal" th:data-comment-id="${comment.id}"></i>                                                                
+                   </div>
+                </div>                                
+            </div>            
+
+            <div class="d-flex justify-content-between mt-3">
+                <input type="text" class="form-control col-10 comment-text">
+                <button type="button" class="btn btn-dark col-2 comment-btn" th:data-report-id="${report.id}">댓글 등록</button>
+            </div>
+		</div>
+	</section>
+	
+	
+	<script layout:fragment="script">
+	
+	$(document).ready(function(){
+
+		$(".coverLink").on("click", function(){
+			
+			let reportId = $(this).data("report-id");
+			
+			location.href = "/report/detail-view?reportId=" + reportId;
+		});
+		
+        $(".commentDeleteIcon").click(function(){
+            
+            let data = $(this).data("comment-id");
+            
+            $("#deleteBtn").data("comment-id", data);
+            
+        });		
+		
+        $("#deleteBtn").on("click", function(){
+            
+            let commentId = $(this).data("comment-id");
+            
+            $.ajax({
+                
+                type: "delete"
+                , url: "/report/comment/delete"
+                , data: {"commentId":commentId}
+                , success: function(data){
+                    if(data.result == "success"){
+                        alert("삭제 완료!");
+                        location.reload();
+                    }else{
+                        alert("삭제 실패!!");
+                    }
+                }
+                , error: function(){
+                    alert("삭제 에러!!");
+                }
+                
+            });             
+            
+        });		
+		
+		
+        $(".comment-btn").on("click", function(){
+            
+            let reportId = $(this).data("report-id");
+            let commentText = $(".comment-text").val();
+            
+            $.ajax({
+                
+                type: "post"
+                , url: "/report/comment/create"
+                , data: {"reportId":reportId, "commentText":commentText}
+                , success: function(data){
+                    if(data.result == "success"){
+                        alert("댓글 추가 완료!");
+                        location.reload();
+                    }else{
+                        alert("댓글 추가 실패!!");
+                    }
+                }
+                , error: function(){
+                    alert("댓글 추가 에러!!");
+                }
+                
+            });
+            
+        });		
+		
+	});
+	
+	</script>  		

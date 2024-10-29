@@ -17,4 +17,9 @@ public class Gallery {
 	
 	private String contents;
 	
+	private int likeCount;
+	private boolean loginUserLike;
+
+	private int commentCount;
+	
 }

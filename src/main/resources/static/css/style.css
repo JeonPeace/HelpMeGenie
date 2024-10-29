@@ -34,7 +34,7 @@ header {
 }
 
 .book-contents {
-	width: 150px;
+	width: 200px;
 	height: 330px;
 }
 
@@ -77,6 +77,11 @@ header {
 .recommend-box {
 	width: 1000px;
 	height: 340px;
+}
+
+.comment-box {
+	width: 1000px;
+
 }
 
 .pull {
