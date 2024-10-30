@@ -80,6 +80,54 @@
 	
 	$(document).ready(function(){
 
+		 $(".likeBtn").on("click", function(){
+		     
+		     let reportId = $(this).data("report-id");
+		
+		     $.ajax({
+		         
+		         type: "post"
+		         , url: "/report/like"
+		         , data: {"reportId":reportId}
+		         , success: function(data){
+		             if(data.result == "success"){
+		                 alert("좋아요 완료!");
+		                 location.reload();
+		             }else{
+		                 alert("좋아요 실패!!");
+		             }
+		         }
+		         , error: function(){
+		             alert("좋아요 에러!!");
+		         }
+		     });             
+		     
+		 });
+		 
+		$(".unlikeBtn").on("click", function(){
+		     
+		     let reportId = $(this).data("report-id");
+		
+		     $.ajax({
+		         
+		         type: "delete"
+		         , url: "/report/unlike"
+		         , data: {"reportId":reportId}
+		         , success: function(data){
+		             if(data.result == "success"){
+		                 alert("좋아요 해제 완료!");
+		                 location.reload();
+		             }else{
+		                 alert("좋아요 해제 실패!!");
+		             }
+		         }
+		         , error: function(){
+		             alert("좋아요 해제 에러!!");
+		         }
+		     });             
+		     
+		 });
+		
 		$(".coverLink").on("click", function(){
 			
 			let reportId = $(this).data("report-id");

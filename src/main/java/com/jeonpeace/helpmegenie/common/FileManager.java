@@ -11,10 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileManager {
 
 	// 상수
-	public static final String FILE_UPLOAD_PATH = "C:\\jeonpeace\\upload\\helpmegenie";
+	public static final String FILE_UPLOAD_PATH = "C:\\jeonpeace\\upload\\helpmegenie\\temporary";
+	public static final String TRUE_FILE_UPLOAD_PATH = "C:\\jeonpeace\\upload\\helpmegenie\\contents";
 	
 	// 파일 저장
-	public static String saveFile(int userId, MultipartFile file) throws Exception {
+	public static String tempSaveFile(int userId, MultipartFile file) throws Exception {
 		
 		if(file.isEmpty()) {
 			throw new Exception("Failed to store empty file " + file.getOriginalFilename());
@@ -49,18 +50,18 @@ public class FileManager {
 		// 파일 저장 경로 : "C:\\jeonpeace\\upload\\helpmegenie/2_8120980/test.png";
 		// URL path : /images/2_8120980/test.png
 		
-		return "/images" + directoryName + "/" + file.getOriginalFilename();
+		return "/imagesTemp" + directoryName + "/" + file.getOriginalFilename();
 		
 	}
 	
-	public static boolean removeFile(String filePath) { // /images/2_8120980/test.png
+	public static boolean removeFileForSave(String filePath) { // /images/2_8120980/test.png
 		
 		if(filePath == null) {
 			return false;
 		}
 		
 		// 파일 저장 경로 : "C:\\jeonpeace\\upload\\helpmegenie/2_8120980/test.png";
-		String fullFilePath = FILE_UPLOAD_PATH + filePath.replace("/images", "");
+		String fullFilePath = FILE_UPLOAD_PATH + filePath.replace("/imagesTemp", "");
 		
 		Path path = Paths.get(fullFilePath);
 		
@@ -81,4 +82,31 @@ public class FileManager {
 		return true;
 	}
 	
+	public static boolean removeFile(String filePath) { // /images/2_8120980/test.png
+		
+		if(filePath == null) {
+			return false;
+		}
+		
+		// 파일 저장 경로 : "C:\\jeonpeace\\upload\\helpmegenie/2_8120980/test.png";
+		String fullFilePath = TRUE_FILE_UPLOAD_PATH + filePath.replace("/imagesContents", "");
+		
+		Path path = Paths.get(fullFilePath);
+		
+		// 폴더 경로 : "C:\\jeonpeace\\upload\\helpmegenie";
+		// 폴더(디렉토리)제거
+		Path directoryPath = path.getParent();
+		
+		// 파일과 폴터(디렉토리) 존재하는지 확인
+		if(Files.exists(path) && Files.exists(directoryPath)) {
+			try {
+				Files.delete(path);
+				Files.delete(directoryPath);
+			} catch (IOException e) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 }

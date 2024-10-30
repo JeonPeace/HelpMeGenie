@@ -4,12 +4,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.jeonpeace.helpmegenie.report.domain.Comment;
+import com.jeonpeace.helpmegenie.image.service.ImageService;
 import com.jeonpeace.helpmegenie.report.domain.Report;
-import com.jeonpeace.helpmegenie.report.repository.CommentRepository;
 import com.jeonpeace.helpmegenie.report.repository.ReportRepository;
-import com.jeonpeace.helpmegenie.user.domain.User;
-import com.jeonpeace.helpmegenie.user.service.UserService;
 
 @Service
 public class ReportService {
@@ -21,7 +18,7 @@ public class ReportService {
 		this.reportRepository = reportRepository;
 	}
 	
-	public Report addReport(int userId, int planId, String contents) {
+	public Report addTempReport(int userId, int planId, String contents) {
 		
 		Report report = Report.builder()
 							  .userId(userId)
@@ -32,6 +29,17 @@ public class ReportService {
 		Report result = reportRepository.save(report);
 		
 		return result;
+	}
+	
+	public Report addRealReport(Report tempReport) {
+		
+		String tempContents = tempReport.getContents();
+		
+		tempContents.replace("/imagesTemp", "/imagesContents");
+		
+		tempReport.setContents(tempContents);
+		
+		return tempReport;
 	}
 	
 	public Report getReport(int reportId) {

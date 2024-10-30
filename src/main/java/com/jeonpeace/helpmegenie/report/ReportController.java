@@ -134,4 +134,17 @@ public class ReportController {
 		return "/report/comment";
 	}
 	
+	@GetMapping("/modify-view")
+	public String modifyReportView(@RequestParam("reportId") int reportId
+								  , Model model) {
+		
+		Report report = reportService.getReport(reportId);
+		model.addAttribute("report", report);	
+		
+		Plan plan = planService.findPlanById(report.getPlanId());
+		model.addAttribute("plan", plan);
+		
+		return "/report/modify";
+	}
+	
 }

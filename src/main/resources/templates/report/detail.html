@@ -15,7 +15,8 @@
 					<p class="book-title font-weight-bold" th:text="${#strings.abbreviate(plan.title, 20)}"></p>
 					<p class="book-author font-weight-bold" th:text="${#strings.abbreviate(plan.author, 20)}"></p>
 					작성자 : <span th:text="${user.loginId}"></span><br>
-					작성일 : <span th:text="${#temporals.format(report.createdAt, 'yyyy-MM-dd')}"></span>
+					작성일 : <span th:text="${#temporals.format(report.createdAt, 'yyyy-MM-dd')}"></span><br>
+					수정일 : <span th:text="${#temporals.format(report.updatedAt, 'yyyy-MM-dd')}"></span>
 					<div class="d-flex justify-content-between">
 						<div>
                             <i th:if="${loginUserLike}" class="bi bi-heart-fill text-danger unlikeBtn" th:data-report-id="${report.id}"></i>
@@ -23,7 +24,7 @@
 	                        <span th:text="${likeCount}">11</span>						
 						</div>
 						<div>
-	                        <i class="bi bi-chat-right-text commentBtn"></i>
+	                        <i class="bi bi-chat-right-text commentBtn" th:data-report-id="${report.id}"></i>
 	                        <span th:text="${commentCount}">12</span>						
 						</div>       
 					</div> 					
@@ -38,8 +39,8 @@
 				<button type="button" id="commentBtn" class="form-control btn-dark" th:data-report-id="${report.id}">댓글</button>
 			</div>
 			<div class="d-flex justify-content-between" id="detailBtns">
-				<button type="button" class="form-control btn-danger btn-sm">삭제하기</button>
-				<button id="saveBtn" type="button" class="form-control btn-info btn-sm">수정하기</button>
+				<button th:if="${session.userId == report.userId}" type="button" class="form-control btn-danger btn-sm">삭제하기</button>
+				<button th:if="${session.userId == report.userId}" type="button" id="modifyBtn" th:data-report-id="${report.id}" class="form-control btn-info btn-sm">수정하기</button>
 				<button type="button" onclick="location.href='/report/gallery-view'" class="form-control btn-dark btn-sm">목록으로</button>
 			</div>	
 		</div>		
@@ -51,6 +52,13 @@
 	
 	$(document).ready(function(){
 
+		$("#modifyBtn").on("click", function(){
+			
+			let reportId = $(this).data("report-id");
+			
+			location.href = "/report/modify-view?reportId=" + reportId;	
+		});
+		
         $(".likeBtn").on("click", function(){
             
             let reportId = $(this).data("report-id");
@@ -100,6 +108,14 @@
         });		
 		
 		
+		$(".commentBtn").on("click", function(){
+			
+		 	let reportId = $(this).data("report-id");
+		 	
+		 	location.href = "/report/comment-view?reportId=" + reportId; 
+		 
+		});
+       
 		$("#commentBtn").on("click", function(){
 			
 			let reportId = $(this).data("report-id");

@@ -1,6 +1,9 @@
 package com.jeonpeace.helpmegenie.image.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jeonpeace.helpmegenie.common.FileManager;
@@ -16,11 +19,11 @@ public class ImageService {
 		this.imageRepository = imageRepository;
 	}
 
-	public String saveImage(int userId, int planId, MultipartFile file) {
+	public String saveTempImage(int userId, int planId, MultipartFile file) {
 		
 		String urlPath;
 		try {
-			urlPath = FileManager.saveFile(userId, file);
+			urlPath = FileManager.tempSaveFile(userId, file);
 		} catch (Exception e) {
 			return null;
 		}
@@ -35,5 +38,35 @@ public class ImageService {
 		return urlPath;
 	}
 	
+	public void saveRealImage(int reportId, int planId, String imagePath) {
+		
+		Image image = Image.builder()
+						   .planId(planId)
+						   .reportId(reportId)
+						   .imagePath(imagePath)
+						   .build();
+		
+		imageRepository.save(image);
+		
+	}
+	
+	public void imageListSet(List<String> urlList, int reportId, int planId) {
+		
+		for(String imagePath:urlList) {
+			
+			deleteImage(imagePath);
+			
+			saveRealImage(reportId, planId, imagePath);
+			
+		}
+		
+	}
+	
+	@Transactional
+	public void deleteImage(String imagePath) {
+		
+		imageRepository.deleteByImagePath(imagePath);
+		
+	}
 	
 }

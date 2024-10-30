@@ -1,6 +1,7 @@
 package com.jeonpeace.helpmegenie.report;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jeonpeace.helpmegenie.image.service.ImageService;
 import com.jeonpeace.helpmegenie.report.domain.Comment;
 import com.jeonpeace.helpmegenie.report.domain.Like;
 import com.jeonpeace.helpmegenie.report.domain.Report;
@@ -25,22 +27,26 @@ public class ReportRestController {
 	private ReportService reportService;
 	private CommentService commentService;
 	private LikeService likeService;
+	private ImageService imageService;
 	
-	public ReportRestController(ReportService reportService, CommentService commentService, LikeService likeService) {
+	public ReportRestController(ReportService reportService, CommentService commentService, LikeService likeService, ImageService imageService) {
 		this.reportService = reportService;
 		this.commentService = commentService;
 		this.likeService = likeService;
+		this.imageService = imageService;
 	}
 	
 	@PostMapping("/create")
 	public Map<String, String> createReport(@RequestParam("contents") String contents
 										    , @RequestParam("planId") int planId
+										    , @RequestParam("urlList") List<String> urlList
 											, HttpSession session){
 		
 		int userId = (Integer)session.getAttribute("userId");
 		
-		Report report = reportService.addReport(userId, planId, contents);
+		Report tempReport = reportService.addTempReport(userId, planId, contents);
 		
+		Report report = reportService.addRealReport(tempReport);
 		
 		Map<String, String> resultMap = new HashMap<>();
 		
@@ -49,6 +55,8 @@ public class ReportRestController {
 		}else {
 			resultMap.put("result", "fail");
 		}
+		
+		imageService.imageListSet(urlList, report.getId(), report.getPlanId());
 		
 		return resultMap;
 	}

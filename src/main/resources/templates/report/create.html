@@ -36,11 +36,14 @@
 	<script layout:fragment="script">
 	
 	$(document).ready(function(){
+		
+		var urlList = [];
+		
 		$("#summernote").summernote({
 			  width: 1200,
-			  height: 400,               
+			  height: 800,               
 			  minHeight: 400,             // 최소 높이
-			  maxHeight: 700,             // 최대 높이
+			  maxHeight: 800,             // 최대 높이
 			  focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
 			  lang: "ko-KR",					// 한글 설정
 			  placeholder: '책을 통해 느낀 감정을 자유롭게 펼쳐주세요!',	//placeholder 설정
@@ -63,10 +66,16 @@
 						for (var i = 0; i < files.length; i++) {
 							sendFile(files[i], this);
 						}
-					}
-				}
-				
-		
+					},
+	                onMediaDelete: function ($target, editor, $editable) {
+	                    if (confirm('이미지를 삭제 하시겠습니까?')) {
+	                        var deletedImageUrl = $target.attr('src')
+
+	                        // ajax 함수 호출
+	                        deleteSummernoteImageFile(deletedImageUrl)
+	                    }
+	                }		
+				}	
 		});		
 		
 		$("#saveBtn").on("click", function(){
@@ -77,7 +86,7 @@
 			$.ajax({
 				type: "post"
 					, url: "/report/create"
-					, data: {"contents":contents, "planId":planId}
+					, data: {"contents":contents, "planId":planId, "urlList":urlList}
 					, success: function(data){
 	                    if(data.result == "success") {
 	                    	alert("독후감 생성 성공!")
@@ -98,6 +107,20 @@
 		
 	
 	
+    function deleteSummernoteImageFile(imageName) {
+        data = new FormData()
+        data.append('imagePath', imageName)
+        $.ajax({
+            data: data,
+            type: 'post',
+            url: '/image/deleteAtCreate',
+            contentType: false,
+            enctype: 'multipart/form-data',
+            processData: false,
+        })
+    }
+	
+	
 	function sendFile(file, el) {
 		
 		let planId = $("#saveBtn").data("plan-id");
@@ -114,7 +137,8 @@
 			contentType : false,
 			enctype : "multipart/form-data",                                  
 			processData : false,
-			success : function(url) {                    
+			success : function(url) {
+				urlList.push(url);
 				$(el).summernote('insertImage', url, function($image) {
 					$image.css('width', "25%");
 				});

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jeonpeace.helpmegenie.common.FileManager;
 import com.jeonpeace.helpmegenie.image.service.ImageService;
 
 import jakarta.servlet.http.HttpSession;
@@ -28,9 +29,26 @@ public class ImageRestController {
 		
 		int userId = (Integer)session.getAttribute("userId");
 		
-		String url = imageService.saveImage(userId, planId, file);
+		String url = imageService.saveTempImage(userId, planId, file);
 		
 		return url;
 	}
+	
+	@PostMapping("/deleteAtCreate")
+	public void deleteImageCreate(@RequestParam("imagePath") String imagePath) {
+		
+		imageService.deleteImage(imagePath);
+		
+		FileManager.removeFileForSave(imagePath);	
+	}
+	
+	@PostMapping("/deleteAtModify")
+	public void deleteImageModify(@RequestParam("imagePath") String imagePath) {
+		
+		imageService.deleteImage(imagePath);		
+		
+		FileManager.removeFile(imagePath);		
+	}
+	
 }
 
