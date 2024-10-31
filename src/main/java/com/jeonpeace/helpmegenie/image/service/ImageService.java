@@ -23,7 +23,7 @@ public class ImageService {
 		
 		String urlPath;
 		try {
-			urlPath = FileManager.tempSaveFile(userId, file);
+			urlPath = FileManager.saveFile(userId, file);
 		} catch (Exception e) {
 			return null;
 		}
@@ -38,34 +38,59 @@ public class ImageService {
 		return urlPath;
 	}
 	
-	public void saveRealImage(int reportId, int planId, String imagePath) {
+	public String saveModifyImage(int userId, int planId, int reportId, MultipartFile file) {
+		
+		String urlPath;
+		try {
+			urlPath = FileManager.saveFile(userId, file);
+		} catch (Exception e) {
+			return null;
+		}
 		
 		Image image = Image.builder()
 						   .planId(planId)
 						   .reportId(reportId)
-						   .imagePath(imagePath)
+						   .imagePath(urlPath)
 						   .build();
 		
 		imageRepository.save(image);
-		
+						   
+		return urlPath;
 	}
 	
-	public void imageListSet(List<String> urlList, int reportId, int planId) {
+	public void imageListSet(List<String> urlList, int reportId) {
 		
 		for(String imagePath:urlList) {
 			
-			deleteImage(imagePath);
+			Image image = imageRepository.findByImagePath(imagePath);
 			
-			saveRealImage(reportId, planId, imagePath);
+			Image updateImage = image.toBuilder()
+									 .reportId(reportId)
+									 .build();
 			
+			imageRepository.save(updateImage);
 		}
 		
 	}
 	
 	@Transactional
 	public void deleteImage(String imagePath) {
-		
+			
 		imageRepository.deleteByImagePath(imagePath);
+		FileManager.removeFile(imagePath);
+		
+	}
+	
+	@Transactional
+	public void deleteImageByReportId(int reportId) {
+			
+		List<Image> imageList = imageRepository.findByReportId(reportId);
+		
+		for(Image image:imageList) {
+			FileManager.removeFile(image.getImagePath());
+		}
+		
+		imageRepository.deleteByReportId(reportId);
 		
 	}
 	

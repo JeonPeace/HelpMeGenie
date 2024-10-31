@@ -6,6 +6,38 @@
 
 
 	<section layout:fragment="main-contents" class="w-75">
+	
+	
+	
+		
+                                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="selectTitle">삭제</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                          정말로 삭제하시겠습니까?
+                                          <br>
+                                          <br>
+									      <div class="text-danger">
+									          * 주의) 삭제된 독후감은 되돌릴 수 없습니다.
+									      </div>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                        <button type="button" class="btn btn-danger" id="decideBtn">결정</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+	
+	
+	
+	
 		<div class=" p-2 bg-light ml-3">
 			<div class="d-flex ml-3">
 				<div class="d-flex justify-content-center">
@@ -39,7 +71,7 @@
 				<button type="button" id="commentBtn" class="form-control btn-dark" th:data-report-id="${report.id}">댓글</button>
 			</div>
 			<div class="d-flex justify-content-between" id="detailBtns">
-				<button th:if="${session.userId == report.userId}" type="button" class="form-control btn-danger btn-sm">삭제하기</button>
+				<button th:if="${session.userId == report.userId}" type="button" id="deleteBtn" class="form-control btn-danger btn-sm" th:data-report-id="${report.id}" data-toggle="modal" data-target="#deleteModal">삭제하기</button>
 				<button th:if="${session.userId == report.userId}" type="button" id="modifyBtn" th:data-report-id="${report.id}" class="form-control btn-info btn-sm">수정하기</button>
 				<button type="button" onclick="location.href='/report/gallery-view'" class="form-control btn-dark btn-sm">목록으로</button>
 			</div>	
@@ -52,11 +84,44 @@
 	
 	$(document).ready(function(){
 
+		$("#deleteBtn").on("click", function(){
+			
+            let data = $(this).data("report-id");
+            
+            $("#decideBtn").data("report-id", data);			
+			
+		});
+		
 		$("#modifyBtn").on("click", function(){
 			
 			let reportId = $(this).data("report-id");
 			
 			location.href = "/report/modify-view?reportId=" + reportId;	
+		});
+		
+		$("#decideBtn").on("click", function(){
+			
+			let reportId = $(this).data("report-id");			
+			
+			$.ajax({
+				
+				type: "delete"
+				, url: "/report/delete"
+				, data: {"reportId":reportId}
+				, success: function(data){
+					if(data.result == "success"){
+						alert("삭제 완료.");
+						location.href = "/report/gallery-view";
+					}else{
+						alert("삭제 실패.");
+					}
+				}
+				, error: function(){
+					alert("삭제 에러.");
+				}
+				
+			});
+			
 		});
 		
         $(".likeBtn").on("click", function(){

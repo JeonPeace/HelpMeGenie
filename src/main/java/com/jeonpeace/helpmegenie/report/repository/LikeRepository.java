@@ -9,6 +9,9 @@ public interface LikeRepository extends JpaRepository<Like, Integer>{
 
 	public int countByReportId(int reportId);
 	
+	@Transactional
+	public void deleteByReportId(int reportId);
+	
 	public Like findByReportIdAndUserId(int reportId, int userId);
 	
 	@Transactional

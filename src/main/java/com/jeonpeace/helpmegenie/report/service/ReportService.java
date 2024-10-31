@@ -3,22 +3,31 @@ package com.jeonpeace.helpmegenie.report.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jeonpeace.helpmegenie.image.service.ImageService;
 import com.jeonpeace.helpmegenie.report.domain.Report;
+import com.jeonpeace.helpmegenie.report.repository.CommentRepository;
+import com.jeonpeace.helpmegenie.report.repository.LikeRepository;
 import com.jeonpeace.helpmegenie.report.repository.ReportRepository;
 
 @Service
 public class ReportService {
 
 	private ReportRepository reportRepository;
+	private ImageService imageService;
+	private LikeRepository likeRepository;
+	private CommentRepository commentRepository;
 
 	
-	public ReportService(ReportRepository reportRepository) {
+	public ReportService(ReportRepository reportRepository, ImageService imageService, LikeRepository likeRepository, CommentRepository commentRepository) {
 		this.reportRepository = reportRepository;
+		this.imageService = imageService;
+		this.likeRepository = likeRepository;
+		this.commentRepository = commentRepository;
 	}
 	
-	public Report addTempReport(int userId, int planId, String contents) {
+	public Report addReport(int userId, int planId, String contents) {
 		
 		Report report = Report.builder()
 							  .userId(userId)
@@ -31,15 +40,22 @@ public class ReportService {
 		return result;
 	}
 	
-	public Report addRealReport(Report tempReport) {
+	public Report modifyReport(int reportId, String contents) {
 		
-		String tempContents = tempReport.getContents();
+		Optional<Report> optionalReport = reportRepository.findById(reportId);
 		
-		tempContents.replace("/imagesTemp", "/imagesContents");
+		Report report = optionalReport.orElse(null);
 		
-		tempReport.setContents(tempContents);
-		
-		return tempReport;
+		if(report != null) {
+			
+			Report modifyReport = report.toBuilder()
+										.contents(contents)
+										.build();
+			
+			return reportRepository.save(modifyReport);
+		}else {
+			return null;
+		}	
 	}
 	
 	public Report getReport(int reportId) {
@@ -51,5 +67,22 @@ public class ReportService {
 		return report;
 	}
 
+	@Transactional
+	public boolean deleteReport(int reportId) {	
+		
+		Optional<Report> optionalReport = reportRepository.findById(reportId);
+		
+		Report report = optionalReport.orElse(null);
+		
+		if(report != null) {
+			imageService.deleteImageByReportId(reportId);
+			likeRepository.deleteByReportId(reportId);
+			commentRepository.deleteByReportId(reportId);
+			reportRepository.deleteById(reportId);
+			return true;
+		}else {
+			return false;
+		}
+	}	
 	
 }

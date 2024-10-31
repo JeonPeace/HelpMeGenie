@@ -11,11 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileManager {
 
 	// 상수
-	public static final String FILE_UPLOAD_PATH = "C:\\jeonpeace\\upload\\helpmegenie\\temporary";
-	public static final String TRUE_FILE_UPLOAD_PATH = "C:\\jeonpeace\\upload\\helpmegenie\\contents";
+	public static final String FILE_UPLOAD_PATH = "C:\\jeonpeace\\upload\\helpmegenie";
 	
 	// 파일 저장
-	public static String tempSaveFile(int userId, MultipartFile file) throws Exception {
+	public static String saveFile(int userId, MultipartFile file) throws Exception {
 		
 		if(file.isEmpty()) {
 			throw new Exception("Failed to store empty file " + file.getOriginalFilename());
@@ -50,18 +49,18 @@ public class FileManager {
 		// 파일 저장 경로 : "C:\\jeonpeace\\upload\\helpmegenie/2_8120980/test.png";
 		// URL path : /images/2_8120980/test.png
 		
-		return "/imagesTemp" + directoryName + "/" + file.getOriginalFilename();
+		return "/images" + directoryName + "/" + file.getOriginalFilename();
 		
 	}
 	
-	public static boolean removeFileForSave(String filePath) { // /images/2_8120980/test.png
+	public static boolean removeTempFile(String filePath) { // /images/2_8120980/test.png
 		
 		if(filePath == null) {
 			return false;
 		}
 		
 		// 파일 저장 경로 : "C:\\jeonpeace\\upload\\helpmegenie/2_8120980/test.png";
-		String fullFilePath = FILE_UPLOAD_PATH + filePath.replace("/imagesTemp", "");
+		String fullFilePath = FILE_UPLOAD_PATH + filePath.replace("/images", "");
 		
 		Path path = Paths.get(fullFilePath);
 		
@@ -89,7 +88,7 @@ public class FileManager {
 		}
 		
 		// 파일 저장 경로 : "C:\\jeonpeace\\upload\\helpmegenie/2_8120980/test.png";
-		String fullFilePath = TRUE_FILE_UPLOAD_PATH + filePath.replace("/imagesContents", "");
+		String fullFilePath = FILE_UPLOAD_PATH + filePath.replace("/images", "");
 		
 		Path path = Paths.get(fullFilePath);
 		

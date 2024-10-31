@@ -16,14 +16,25 @@
 			</div>
 		</div>	
 		<div class="ml-3">
-			<textarea id="summernote" name="contents" th:data-report-contents="${report.contents}"></textarea>
-		</div>	
+			<textarea id="summernote" name="contents" th:data-report-contents="${report.contents}" th:data-report-id="${report.id}" th:data-plan-id="${plan.id}"></textarea>
+		</div>
+		<div class="ml-3 mt-3 d-flex justify-content-between">
+			<button type="button" id="getBackBtn" class="form-control btn-danger btn-sm w-25">수정 취소</button>
+			<button type="button" id="modifyBtn" class="form-control btn-info btn-sm w-25">수정하기</button>			
+		</div>		
 	</section>
 	
 
         
 	<script layout:fragment="script">
 		$(document).ready(function(){
+			
+			$("#getBackBtn").on("click", function(){
+				
+				let reportId = $("#summernote").data("report-id");
+				
+				location.href = "/report/detail-view?reportId=" + reportId;	
+			});			
 			
 			$("#summernote").summernote({
 				  width: 1200,
@@ -52,7 +63,15 @@
 							for (var i = 0; i < files.length; i++) {
 								sendFile(files[i], this);
 							}
-						}
+						},
+		                onMediaDelete: function ($target, editor, $editable) {
+		                    if (confirm('이미지를 삭제 하시겠습니까?')) {
+		                        var deletedImageUrl = $target.attr('src')
+
+		                        // ajax 함수 호출
+		                        deleteSummernoteImageFile(deletedImageUrl)
+		                    }
+		                }
 					}
 			});		
 			
@@ -61,6 +80,74 @@
 			$('#summernote').summernote('pasteHTML', HTMLstring);
 			
 			
+			$("#modifyBtn").on("click", function(){
+				
+				let contents = $("#summernote").val();
+				let reportId = $("#summernote").data("report-id");
+				
+				if(contents == ""){
+					alert("내용을 포함하여 글을 써주세요.");
+					return;
+				}
+				
+				$.ajax({
+					type: "put"
+						, url: "/report/modify"
+						, data: {"contents":contents, "reportId":reportId}
+						, success: function(data){
+		                    if(data.result == "success") {
+		                    	alert("독후감 수정 완료!");
+		                    	location.href = "/report/detail-view?reportId=" + reportId;
+		                    } else {
+		                        alert("독후감 수정 실패!");
+		                    }
+		                }
+		                , error:function() {
+		                    alert("독후감 수정 에러!");
+		                }
+					});
+				});
+			
+
+		    function deleteSummernoteImageFile(imageName) {
+		        data = new FormData()
+		        data.append('imagePath', imageName)
+		        $.ajax({
+		            data: data,
+		            type: 'post',
+		            url: '/image/delete',
+		            contentType: false,
+		            enctype: 'multipart/form-data',
+		            processData: false,
+		        });
+		    }
+			
+		    
+			function sendFile(file, el) {
+				
+				let planId = $("#summernote").data("plan-id");
+				let reportId = $("#summernote").data("report-id");
+				
+				var form_data = new FormData();
+				form_data.append('imageFile', file);
+				form_data.append('planId', planId);
+				form_data.append('reportId', reportId);
+				
+				$.ajax({                                                              
+					type : "post",
+					url : "/image/saveAtModify",
+					data: form_data,
+					cache : false,
+					contentType : false,
+					enctype : "multipart/form-data",                                  
+					processData : false,
+					success : function(url) {
+						$(el).summernote('insertImage', url, function($image) {
+							$image.css('width', "25%");
+						});
+					}
+				});
+			}
 		});
 	
 	</script>

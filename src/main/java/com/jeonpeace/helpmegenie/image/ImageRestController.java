@@ -34,20 +34,25 @@ public class ImageRestController {
 		return url;
 	}
 	
-	@PostMapping("/deleteAtCreate")
+	@PostMapping("/saveAtModify")
+	public String saveImageAtModify(@RequestParam("imageFile") MultipartFile file
+							, @RequestParam("planId") int planId
+							, @RequestParam("reportId") int reportId
+							, HttpSession session) {
+		
+		int userId = (Integer)session.getAttribute("userId");
+		
+		String url = imageService.saveModifyImage(userId, planId, reportId, file);
+		
+		return url;
+	}
+	
+	@PostMapping("/delete")
 	public void deleteImageCreate(@RequestParam("imagePath") String imagePath) {
 		
 		imageService.deleteImage(imagePath);
 		
-		FileManager.removeFileForSave(imagePath);	
-	}
-	
-	@PostMapping("/deleteAtModify")
-	public void deleteImageModify(@RequestParam("imagePath") String imagePath) {
-		
-		imageService.deleteImage(imagePath);		
-		
-		FileManager.removeFile(imagePath);		
+		FileManager.removeTempFile(imagePath);	
 	}
 	
 }

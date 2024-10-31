@@ -37,8 +37,6 @@
 	
 	$(document).ready(function(){
 		
-		var urlList = [];
-		
 		$("#summernote").summernote({
 			  width: 1200,
 			  height: 800,               
@@ -78,10 +76,17 @@
 				}	
 		});		
 		
+
+		
 		$("#saveBtn").on("click", function(){
 			
 			let contents = $("#summernote").val();
 			let planId = $(this).data("plan-id");
+			
+			if(contents == ""){
+				alert("내용을 포함하여 글을 써주세요.");
+				return;
+			}
 			
 			$.ajax({
 				type: "post"
@@ -89,7 +94,7 @@
 					, data: {"contents":contents, "planId":planId, "urlList":urlList}
 					, success: function(data){
 	                    if(data.result == "success") {
-	                    	alert("독후감 생성 성공!")
+	                    	alert(urlList);
 	                    	location.href = "/report/gallery-view";
 	                    } else {
 	                        alert("독후감 생성 실패!");
@@ -105,7 +110,7 @@
 		
 		});
 		
-	
+    var urlList = [];
 	
     function deleteSummernoteImageFile(imageName) {
         data = new FormData()
@@ -113,13 +118,14 @@
         $.ajax({
             data: data,
             type: 'post',
-            url: '/image/deleteAtCreate',
+            url: '/image/delete',
             contentType: false,
             enctype: 'multipart/form-data',
             processData: false,
         })
     }
 	
+
 	
 	function sendFile(file, el) {
 		
@@ -139,6 +145,7 @@
 			processData : false,
 			success : function(url) {
 				urlList.push(url);
+				console.log(urlList);
 				$(el).summernote('insertImage', url, function($image) {
 					$image.css('width', "25%");
 				});

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,9 +45,7 @@ public class ReportRestController {
 		
 		int userId = (Integer)session.getAttribute("userId");
 		
-		Report tempReport = reportService.addTempReport(userId, planId, contents);
-		
-		Report report = reportService.addRealReport(tempReport);
+		Report report = reportService.addReport(userId, planId, contents);
 		
 		Map<String, String> resultMap = new HashMap<>();
 		
@@ -56,11 +55,43 @@ public class ReportRestController {
 			resultMap.put("result", "fail");
 		}
 		
-		imageService.imageListSet(urlList, report.getId(), report.getPlanId());
+		imageService.imageListSet(urlList, report.getId());
 		
 		return resultMap;
 	}
 
+	@PutMapping("/modify")
+	public Map<String, String> modifyReport(@RequestParam("reportId") int reportId
+										, @RequestParam("contents") String contents){
+		
+		
+		Report report = reportService.modifyReport(reportId, contents);
+		
+		Map<String, String> resultMap = new HashMap<>();
+		
+		if(report != null) {
+			resultMap.put("result", "success");
+		}else {
+			resultMap.put("result", "fail");
+		}
+		
+		return resultMap;
+	}
+	
+	@DeleteMapping("/delete")
+	public Map<String, String> deleteMemo(@RequestParam("reportId") int reportId) {
+		
+		Map<String, String> resultMap = new HashMap<>();		
+		
+		if(reportService.deleteReport(reportId)) {
+			resultMap.put("result", "success");
+		}else {
+			resultMap.put("result", "fail");
+		}
+		
+		return resultMap;
+	}	
+	
 	@PostMapping("/comment/create")
 	public Map<String, String> createComment(@RequestParam("reportId") int reportId
 											, @RequestParam("commentText") String commentText
