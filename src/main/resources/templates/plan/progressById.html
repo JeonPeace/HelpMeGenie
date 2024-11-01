@@ -33,13 +33,15 @@
 	
 	
 		<div class="d-flex ml-3">
-			<nav>
-	           	<ul th:each="plan, status:${planList}" class="nav flex-column">
-	               	<li class="nav-item mb-2">
-						<a th:href="|/plan/progress-view-by-id?planId=${plan.planId}|" th:text="|- ${status.count} 번째 플랜|" th:data-plan-id="${plan.planId}"></a>
-	            	</li>                       	
-	            </ul>
-			</nav>
+			<div class="planList bg-light d-flex justify-content-center">
+				<nav>
+		           	<ul th:each="plan, status:${planList}" class="nav flex-column">
+		               	<li class="nav-item mb-2">
+							<a th:href="|/plan/progress-view-by-id?planId=${plan.planId}|" th:text="|- ${status.count} 번째 플랜|" th:data-plan-id="${plan.planId}"></a>
+		            	</li>                       	
+		            </ul>
+				</nav>		
+			</div>
 			<div class="ml-5">
 				<div class="d-flex"  th:if="${plan != null}">
 					<div id="donutchart" style="width: 400px; height: 300px;"></div>
