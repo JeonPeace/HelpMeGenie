@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jeonpeace.helpmegenie.api.service.AladinApiService;
 import com.jeonpeace.helpmegenie.book.dto.BookLookUpDto;
 import com.jeonpeace.helpmegenie.plan.domain.Plan;
+import com.jeonpeace.helpmegenie.plan.dto.PlanList;
 import com.jeonpeace.helpmegenie.plan.repository.PlanRepository;
 
 @Service
@@ -53,15 +54,29 @@ public class PlanService {
 		return result;
 	}
 
-	public Plan getPlanUnFinished(int userId) {
+	public List<PlanList> getPlanUnFinished(int userId) {
 		
-		List<Plan> planList = planRepository.findByUserIdAndFinished(userId, false);
+		List<Plan> plans = planRepository.findByUserIdAndFinished(userId, false);
 		
-		if(planList.size() > 0) {
-			return planList.get(0);
-		}else {
-			return null;
+		List<PlanList> planLists = new ArrayList<>();
+		
+		for(Plan plan:plans){
+			
+			PlanList planList = PlanList.builder()
+										.planId(plan.getId())
+										.cover(plan.getCover())
+										.author(plan.getAuthor())
+										.title(plan.getTitle())
+										.totalPage(plan.getTotalPage())
+										.donePage(plan.getDonePage())
+										.startDate(plan.getStartDate())
+										.endDate(plan.getEndDate())
+										.build();
+			
+			planLists.add(planList);
 		}	
+		
+		return planLists;
 	}
 	
 	public List<Plan> getPlanFinished(int userId) {

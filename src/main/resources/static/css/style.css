@@ -108,6 +108,11 @@ header {
 	height: 30px;
 }
 
+.planList {
+	width: 150px;
+}
+
+
 #progress-box {
 	width: 375px;
 	height: 225px;
@@ -129,8 +134,8 @@ header {
 }
 
 #calendar {
-	width: 600px;
-	height: 500px;
+	width: 700px;
+	height: 600px;
 }
 
 #new-plan {

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.jeonpeace.helpmegenie.api.service.AladinApiService;
 import com.jeonpeace.helpmegenie.book.dto.BookLookUpDto;
 import com.jeonpeace.helpmegenie.plan.domain.Plan;
+import com.jeonpeace.helpmegenie.plan.dto.PlanList;
 import com.jeonpeace.helpmegenie.plan.service.PlanService;
 
 import jakarta.servlet.http.HttpSession;
@@ -39,19 +40,33 @@ public class PlanController {
 		
 		int userId = (Integer)session.getAttribute("userId");
 		
-		Plan plan = planService.getPlanUnFinished(userId);
+		List<PlanList> planList = planService.getPlanUnFinished(userId);
+		model.addAttribute("planList", planList);
 		
-		if(plan != null) {
-			String isbn13 = planService.getIsbn13(plan.getId());
-			List<BookLookUpDto> lookUpBook = aladinApiService.getBookByIsbn(isbn13);
-			model.addAttribute("book", lookUpBook);
-
-			model.addAttribute("plan", plan);	
+		if(planList.size() > 0) {
+		
+			PlanList planZero = planList.get(0);
+			model.addAttribute("plan", planZero);			
+			
 		}
-
-
 		
 		return "/plan/progress";
+	}
+	
+	@GetMapping("/progress-view-by-id")
+	public String progressViewById(@RequestParam("planId") int planId
+								 , HttpSession session
+								 , Model model) {
+		
+		int userId = (Integer)session.getAttribute("userId");
+		
+		List<PlanList> planList = planService.getPlanUnFinished(userId);
+		model.addAttribute("planList", planList);
+		
+		Plan plan = planService.findPlanById(planId);
+		model.addAttribute("plan", plan);
+		
+		return "/plan/progressById";
 	}
 	
 	@GetMapping("/new-plan-view")

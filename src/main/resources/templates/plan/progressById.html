@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko" 
+    xmlns:th="http://www.thymeleaf.org" 
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/leftDefault}">
+
+        
+	<section layout:fragment="main-contents" class="w-75">
+	
+	
+	
+                                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">계획 삭제</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        정말로 계획을 삭제하시겠습니까?
+                                        <br>
+                                        <span class="text-danger">* 주의) 삭제한 계획은 되돌릴 수 없습니다.</span>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                        <button type="button" class="btn btn-danger" id="deleteModalBtn">삭제</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>	
+	
+	
+		<div class="d-flex ml-3">
+			<nav>
+	           	<ul th:each="plan, status:${planList}" class="nav flex-column">
+	               	<li class="nav-item mb-2">
+						<a th:href="|/plan/progress-view-by-id?planId=${plan.planId}|" th:text="|- ${status.count} 번째 플랜|" th:data-plan-id="${plan.planId}"></a>
+	            	</li>                       	
+	            </ul>
+			</nav>
+			<div class="ml-5">
+				<div class="d-flex"  th:if="${plan != null}">
+					<div id="donutchart" style="width: 400px; height: 300px;"></div>
+					<div>
+						<div class="m-3">
+							<div class="book-contents">
+								<div class="book-cover d-flex justify-content-center">
+									<img th:src="${plan.cover}" class="img-fluid" alt="Cover image">					            			
+							    </div>
+							    <div class="book-data mt-2">
+									<p class="book-title"><span id="title" th:text="${#strings.abbreviate(plan.title,20)}" class="font-weight-bold" th:data-title="${plan.title}"></span></p>
+									<p class="book-author"><span th:text="${#strings.abbreviate(plan.author, 20)}" class="font-weight-bold"></span></p>						            			
+							    </div>	            		
+							</div>					
+						</div>				
+					</div>
+					<div class="mt-2 ml-4">
+					    <div id="progress-box" th:if="${plan != null}" class="bg-light">
+						    <div class="pt-5 pl-4">
+								전체 페이지 수 : <span id="page" th:text="${plan.totalPage}" th:data-book-total-page="${plan.totalPage}" th:data-book-done-page="${plan.donePage}"></span>p
+								<br>
+								지금까지 읽은 페이지 수 : <span th:text="${plan.donePage}"></span> 	p
+								<br>
+								오늘 읽은 페이지 수
+								<br>
+								<span>추가하기 : <input type="number" class="w-25" id="addPage" th:data-plan-id="${plan.id}" th:max="${plan.totalPage - plan.donePage}"> p</span>	    
+						    </div>
+							<div class="d-flex justify-content-end pt-3 pr-3">
+								<button type="button" class="form-control btn-secondary w-25" id="addPageBtn">저장</button>
+							</div>						
+					    </div>
+					    <br>		   
+					    <div class="w-100">
+					    	<button type="button" class="form-control btn-dark" id="endPlanBtn">독서 완료하기</button>
+					    	<button type="button" class="form-control btn-danger mt-1" id="deletePlanBtn" data-toggle="modal" data-target="#deleteModal" th:data-plan-id="${plan.id}">계획 삭제하기</button>
+					    </div>
+					</div>					 		
+				</div>			
+				<div th:if="${plan != null}" class="mt-4">
+			    	<div id='calendar'></div>
+					<span id="date" th:data-start-date="${plan.startDate}" th:data-end-date="${plan.endDate}"></span>		
+				</div>
+				<div th:if="${plan == null}">
+					<div class="d-flex justify-content-center align-items-center">
+						<button type="button" id="new-plan" onclick="location.href='/plan/new-plan-view'" class="bg-secondary d-flex justify-content-center align-items-center text-light" >
+							현재 진행중인 계획이 없습니다.
+							<br>
+							<br>
+							계획을 생성하려면 이곳을 누르세요.
+						</button>
+					</div>
+				</div>					
+			</div>
+		</div>
+	
+	</section>
+	
+	<script layout:fragment="script">
+	 
+    var calendar = null;
+    var initialLocaleCode = 'ko';
+    var localeSelectorEl = document.getElementById('locale-selector');
+    
+    var totalPage = $("#page").data("book-total-page");
+    var donePage = $("#page").data("book-done-page");
+
+    
+      $(document).ready(function (){
+
+          var calendarEl = document.getElementById('calendar');
+          
+          calendar = new FullCalendar.Calendar(calendarEl, {
+              headerToolbar: {
+
+              },
+				
+          	events: function(info, successCallback, failureCallback) {
+    			$.ajax({
+    				url: '/calendar/data',
+    				type: 'GET',
+    				dataType: 'json',
+    				data: {
+    			        start: info.start.valueOf(),
+    			        end: info.end.valueOf()
+    				},
+    				success: function(data) {
+    					successCallback(data);
+    				}
+    			});
+    		}
+                  
+                  
+          });
+          calendar.render();    	  
+                
+	        google.charts.load("current", {packages:["corechart"]});
+	        google.charts.setOnLoadCallback(drawChart);
+	        function drawChart() {
+	          var data = google.visualization.arrayToDataTable([
+	            ['progress', 'Amount given'],
+	            ['완료', donePage],
+	            ['미완', totalPage - donePage]
+	          ]);
+			  
+	          
+	          var options = {
+	            title: '독서 진행도',
+	            pieHole: 0.55,
+	            legend: {position: 'none'},
+	          	chartArea: {width: 400, height: 250}
+	          };
+			  
+	          
+	          var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+	          chart.draw(data, options);
+	        }    
+        
+	        $("#deleteModalBtn").on("click", function(){
+	        	
+	        	let planId = $(this).data("plan-id");
+	        	
+                $.ajax({
+                    
+                    type: "delete"
+                    , url: "/plan/deletePlan"
+                    , data: {"planId":planId}
+                    , success: function(data){
+                        if(data.result == "success"){
+                            alert("삭제 완료!");
+                            location.reload();
+                        }else{
+                            alert("삭제 실패!!");
+                        }
+                    }
+                    , error: function(){
+                        alert("삭제 에러!!");
+                    }
+                });   	        	
+	        	
+	        });
+	        
+	        $("#deletePlanBtn").on("click", function(){
+	        	
+	        	let planId = $(this).data("plan-id");
+	        	
+	        	$("#deleteModalBtn").data("plan-id", planId);
+	        });
+	        
+	        $("#endPlanBtn").on("click", function(){
+	        	
+	        	let planId = $("#addPage").data("plan-id");
+	        	
+	        	if(totalPage > donePage){
+	        		alert("아직 독서가 끝나지 않았습니다.");
+	        		return;
+	        	}
+	        	
+	        	$.ajax({
+	                type:"post"
+			            , url:"/plan/endPlan"
+			            , data:{"planId":planId}
+			            , success:function(data) {
+			                if(data.result == "success") {
+			                	alert("독서 완료!");
+			                	location.href = "/plan/progress-view";
+			                } else {
+			                    alert("독서 완료 실패");
+			                }
+			            }
+			            , error:function() {
+			                alert("독서 완료 에러");
+			            }
+	        	});
+	        	
+	        });
+	        
+	        $("#addPageBtn").on("click", function(){
+	        	
+	        	let planId = $("#addPage").data("plan-id");
+	        	let addPage = $("#addPage").val();
+	        	
+	        	if(addPage == ""){
+	        		alert("추가할 페이지 수를 적어주세요.");
+	        		return;
+	        	}
+	        	if(addPage <= 0){
+	        		alert("0보다 큰 페이지 수를 적어주세요.");
+	        		return;
+	        	}
+	        	if(addPage > (totalPage - donePage)){
+	        		alert("총 완독 페이지 수가 책의 페이지 수를 넘습니다. 올바른 수를 입력해주세요.");
+	        		return;
+	        	}
+	        	
+	        	$.ajax({
+	                type:"post"
+		            , url:"/plan/addPage"
+		            , data:{"planId":planId, "addPage":addPage}
+		            , success:function(data) {
+		                if(data.result == "success") {
+		                	alert("페이지 추가 완료");
+		                	location.reload();
+		                } else {
+		                    alert("페이지 추가 실패");
+		                }
+		            }
+		            , error:function() {
+		                alert("페이지 추가 에러");
+		            }
+	        	});
+	        	
+	        });
+	        
+    	});
+
+	</script>
