@@ -12,4 +12,6 @@ public interface ReportRepository extends JpaRepository<Report, Integer>{
 	
 	public List<Report> findByOrderByIdDesc();
 	
+	public List<Report> findByUserIdOrderByIdDesc(int nowLoginUserId);
+	
 }

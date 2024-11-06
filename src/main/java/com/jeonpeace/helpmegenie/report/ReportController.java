@@ -65,6 +65,18 @@ public class ReportController {
 		return "/report/create";
 	}
 	
+	@GetMapping("/my-gallery-view")
+	public String myGalleryView(HttpSession session
+								, Model model) {
+		
+		int userId = (Integer)session.getAttribute("userId");
+		
+		List<Gallery> galleryList = galleryService.getUsersReportList(userId);
+		model.addAttribute("galleryList", galleryList);
+		
+		return "/report/gallery";
+	}
+	
 	@GetMapping("/gallery-view")
 	public String galleryView(HttpSession session
 							 , Model model) {

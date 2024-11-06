@@ -32,9 +32,52 @@ public class GalleryService {
 		this.likeRepository = likeRepository;
 	}
 	
+	public List<Gallery> getUsersReportList(int nowLoginUserId){
+		
+		List<Report> reportList = reportRepository.findByUserIdOrderByIdDesc(nowLoginUserId);
+		
+		List<Gallery> galleryList = new ArrayList<>();
+		
+		for(Report report:reportList) {
+			
+			int planId = report.getPlanId();
+			
+			int commentCount = commentRepository.countByReportId(report.getId());
+			int likeCount = likeRepository.countByReportId(report.getId());
+			String userLoginId = userRepository.getLoginIdById(report.getUserId());
+			
+			Like like = likeRepository.findByReportIdAndUserId(report.getId(), nowLoginUserId);
+			Boolean loginUserLike = false;
+
+			if(like != null) {
+				loginUserLike = true;
+			}
+			
+			Plan plan = planRepository.findById(planId);
+			
+			Gallery gallery = Gallery.builder()
+									 .reportId(report.getId())
+									 .userId(report.getUserId())
+									 .userLoginId(userLoginId)
+									 .contents(report.getContents())
+									 .cover(plan.getCover())
+									 .title(plan.getTitle())
+									 .author(plan.getAuthor())
+									 .commentCount(commentCount)
+									 .likeCount(likeCount)
+									 .loginUserLike(loginUserLike)
+									 .build();
+			
+			
+			galleryList.add(gallery);
+		}
+		
+		return galleryList;
+	}
+	
 	public List<Gallery> getReportList(int nowLoginUserId){
 		
-		List<Report> reportList = reportRepository.findTop5ByOrderByIdDesc();
+		List<Report> reportList = reportRepository.findByOrderByIdDesc();
 		
 		List<Gallery> galleryList = new ArrayList<>();
 		

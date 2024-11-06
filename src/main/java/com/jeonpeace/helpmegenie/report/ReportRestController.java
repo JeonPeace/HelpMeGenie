@@ -40,7 +40,7 @@ public class ReportRestController {
 	@PostMapping("/create")
 	public Map<String, String> createReport(@RequestParam("contents") String contents
 										    , @RequestParam("planId") int planId
-										    , @RequestParam("urlList") List<String> urlList
+										    , @RequestParam(value="urlList", required=false) List<String> urlList
 											, HttpSession session){
 		
 		int userId = (Integer)session.getAttribute("userId");
@@ -55,7 +55,12 @@ public class ReportRestController {
 			resultMap.put("result", "fail");
 		}
 		
-		imageService.imageListSet(urlList, report.getId());
+		if(urlList != null) {
+			
+			imageService.imageListSet(urlList, report.getId());
+			
+		}
+
 		
 		return resultMap;
 	}
